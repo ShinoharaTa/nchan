@@ -65,6 +65,18 @@ const pool = new SimplePool();
 import { NostrFetcher } from "nostr-fetch";
 import type { NostrEvent, FetchFilter } from "nostr-fetch";
 import { simplePoolAdapter } from "@nostr-fetch/adapter-nostr-tools";
+import { goto } from "$app/navigation";
+
+export const generateKey = () => {
+  const key = generatePrivateKey();
+  localStorage.setItem("nchan_private_key", key);
+  const expireDate = format(
+    startOfDay(addDays(new Date(), 1)),
+    "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"
+  );
+  localStorage.setItem("nchan_private_key_expire", expireDate);
+  return { key, expireDate };
+};
 
 export const post = async (content: string, thread: string) => {
   if (!nsec) {
@@ -72,22 +84,15 @@ export const post = async (content: string, thread: string) => {
       window.confirm("匿名投稿しますか？\n今日のみ有効なキーを自動生成します。")
     ) {
       // キー生成
-      const key = generatePrivateKey();
-      localStorage.setItem("nchan_private_key", key);
-      const expireDate = format(
-        startOfDay(addDays(new Date(), 1)),
-        "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"
-      );
-      localStorage.setItem("nchan_private_key_expire", expireDate);
-      nsec = key;
+      const { key } = generateKey();
+      nsec = key
     } else {
       if (
         window.confirm(
           "秘密鍵を登録しますか？\n投稿を破棄して設定ページを開きます。"
         )
       ) {
-        // 鍵設定のページへ
-        window.alert("そんな機能は今ないです。");
+        goto("/settings/keys");
       } else {
         window.alert("投稿を中止します");
       }
@@ -101,7 +106,7 @@ export const post = async (content: string, thread: string) => {
     tags: [],
     created_at: Math.floor(new Date().getTime() / 1000),
   };
-  event.tags.push(['e', thread, "", 'root']);
+  event.tags.push(["e", thread, "", "root"]);
   const post = finishEvent(event, nsec);
   new Promise(() => {
     const pub = pool.publish(relays, post);
@@ -113,10 +118,7 @@ export const post = async (content: string, thread: string) => {
 };
 
 const fetcher = NostrFetcher.withCustomPool(simplePoolAdapter(pool));
-export const getSingleItem = async (params: {
-  kind: number;
-  id: string
-}) => {
+export const getSingleItem = async (params: { kind: number; id: string }) => {
   const filters: FetchFilter = { kinds: [params.kind], "#e": [params.id] };
   const lastData: NostrEvent | undefined = await fetcher.fetchLastEvent(
     relays,

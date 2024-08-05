@@ -35,7 +35,7 @@ const sorted = (events: Nostr.Event[]) => {
       <h2 class="flex-fill text-center px-3">
         んちゃんねる
       </h2>
-      <div>設定</div>
+      <div><a href="/settings/keys">設定</a></div>
     </section>
 
     <section>

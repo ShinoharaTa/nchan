@@ -53,7 +53,7 @@ const submit = async () => {
         <h2 class="flex-fill px-3">
           <Event queryKey={[]} id={channel_id} let:event>{JSON.parse(event.content).name ?? "タイトルなし"}</Event>
         </h2>
-        <div>設定</div>
+        <div><a href="/settings/keys">設定</a></div>
       </section>
       <section class="d-flex align-items-center justify-content-between">
         <div>
