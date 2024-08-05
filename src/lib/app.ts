@@ -84,6 +84,7 @@ export const post = async (content: string, thread: string) => {
         )
       ) {
         // 鍵設定のページへ
+        window.alert("そんな機能は今ないです。");
       } else {
         window.alert("投稿を中止します");
       }

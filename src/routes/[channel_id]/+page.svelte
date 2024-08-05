@@ -19,9 +19,11 @@ const limitLists = [20, 50, 100];
 const selectedLimit = writable(20);
 
 let postContent = "";
-const submit = () => {
-	post(postContent, channel_id);
-  postContent = "";
+const submit = async () => {
+	const result = await post(postContent, channel_id);
+  if(result) {
+    postContent = "";
+  }
 };
 </script>
 
