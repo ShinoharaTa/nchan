@@ -1,19 +1,21 @@
 <script lang="ts">
 import type { Nostr } from "nosvelte";
 import { format, fromUnixTime } from "date-fns";
-// export let metadata: Nostr.Event<Nostr.Kind.Metadata>;
 export let event: Nostr.Event<Nostr.Kind.Text>;
 const content = JSON.parse(event.content);
 </script>
 <div class="mt-3">
-    <h3>
-        {content.name !== "" ? content.name : "スレタイなし"}
-    </h3>
-    <div>
-        {format(fromUnixTime(event.created_at), "y/M/d h:m:ss")}
-        {event.pubkey.slice(0, 8)}
-    </div>
-    <div class="ellipsis">
-        <a href="/{event.id}">https://nchan.shino3.net/{event.id}</a>
+    <h2 class="ellipsis">
+        <a href="/{event.id}">{content.name !== "" ? content.name : "スレタイなし"}</a>
+    </h2>
+    <div class="detail">
+        {format(fromUnixTime(event.created_at), "yyyy/MM/dd hh:mm:ss")}
+        <span class="px-2" style="background-color: #{event.pubkey.slice(0, 6)}88;">{event.pubkey.slice(0, 8)}</span>
     </div>
 </div>
+
+<style>
+    .detail {
+        font-size: 0.8rem;
+    }
+</style>

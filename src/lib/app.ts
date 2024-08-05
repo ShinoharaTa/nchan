@@ -62,6 +62,9 @@ import { generatePrivateKey, finishEvent, Kind, SimplePool } from "nostr-tools";
 import type { EventTemplate, Event } from "nostr-tools";
 import { addDays, startOfDay, format, parseISO, isAfter } from "date-fns";
 const pool = new SimplePool();
+import { NostrFetcher } from "nostr-fetch";
+import type { NostrEvent, FetchFilter } from "nostr-fetch";
+import { simplePoolAdapter } from "@nostr-fetch/adapter-nostr-tools";
 
 export const post = async (content: string, thread: string) => {
   if (!nsec) {
@@ -107,4 +110,17 @@ export const post = async (content: string, thread: string) => {
     });
   });
   return true;
+};
+
+const fetcher = NostrFetcher.withCustomPool(simplePoolAdapter(pool));
+export const getSingleItem = async (params: {
+  kind: number;
+  id: string
+}) => {
+  const filters: FetchFilter = { kinds: [params.kind], "#e": [params.id] };
+  const lastData: NostrEvent | undefined = await fetcher.fetchLastEvent(
+    relays,
+    filters
+  );
+  return lastData;
 };
