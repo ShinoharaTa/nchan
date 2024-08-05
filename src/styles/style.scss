@@ -1,0 +1,13 @@
+body {
+}
+
+.lf {
+  white-space: pre-wrap;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}

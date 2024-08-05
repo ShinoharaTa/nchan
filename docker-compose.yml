@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  node:
+    build: ./docker/node
+    container_name: node
+    ports:
+      - 5173:5173
+    volumes:
+      - ./:/var/www/
+    tty: true
+    # environment:
+    #   PORT: 3000
+    #   HOST: 0.0.0.0
+    command: /bin/bash
+    # command: sh -c "yarn install && yarn dev"
