@@ -29,7 +29,12 @@ export function parseContent(text: string) {
   };
 }
 
-export const relays = ["wss://r.kojira.io", "wss://yabu.me"];
+export const relays = [
+  "wss://relay-jp.nostr.wirednet.jp",
+  "wss://r.kojira.io",
+  "wss://yabu.me",
+  "wss://relay-jp.shino3.net",
+];
 
 import { createRxForwardReq } from "rx-nostr";
 export const req = createRxForwardReq();
@@ -66,6 +71,7 @@ import { NostrFetcher } from "nostr-fetch";
 import type { NostrEvent, FetchFilter } from "nostr-fetch";
 import { simplePoolAdapter } from "@nostr-fetch/adapter-nostr-tools";
 import { goto } from "$app/navigation";
+import Thread from "./components/thread.svelte";
 
 export const generateKey = () => {
   const key = generatePrivateKey();
@@ -85,7 +91,7 @@ export const post = async (content: string, thread: string) => {
     ) {
       // キー生成
       const { key } = generateKey();
-      nsec = key
+      nsec = key;
     } else {
       if (
         window.confirm(
@@ -125,4 +131,24 @@ export const getSingleItem = async (params: { kind: number; id: string }) => {
     filters
   );
   return lastData;
+};
+
+type SingleThread = {
+  id: string;
+  author: string;
+  latest_update: number;
+  name: string;
+  events: {
+    content: string;
+    pubkey: string;
+    created_at: number;
+  }[];
+}
+
+export const getThreadList = async (): Promise<SingleThread[]> => {
+  const result = await pool.get(relays, {
+    kinds: [30078],
+    "#d": ["nchan_list"],
+  });
+  return result ? JSON.parse(result.content) : [];
 };
