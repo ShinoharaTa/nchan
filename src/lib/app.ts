@@ -1,7 +1,7 @@
 export function parseContent(text: string) {
   const urlPattern = /(https?:\/\/[^\s]+)/g;
   const twitterPattern = /(https?:\/\/(twitter\.com|x\.com)\/[^\s]+)/g;
-  const imagePattern = /(https?:\/\/[^\s]+\.(jpg|png|gif))/g;
+  const imagePattern = /(https?:\/\/[^\s]+\.(jpg|jpeg|png|gif|webp))/g;
   const youtubePattern = /(https?:\/\/www\.youtube\.com\/watch\?v=[^\s]+)/g;
 
   const urls: string[] = text.match(urlPattern) || [];

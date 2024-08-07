@@ -1,6 +1,6 @@
 <script lang="ts">
 export let hex: string;
-export const style: "simple" | "none" | undefined = undefined;
+export let style: "simple" | "none" | undefined = undefined;
 </script>
 
 {#if style === "simple"}
