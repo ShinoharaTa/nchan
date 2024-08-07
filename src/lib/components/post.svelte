@@ -13,7 +13,7 @@ const parsed = parseContent(event.content);
     <div class="content lf">{parsed.text_without_urls}</div>
     <div class="content lf">{parsed.other_urls}</div>
     {#each parsed.image_urls as image}
-      <img src={image} alt="" srcset="" class="img-fluid content-image">
+      <a href={image} target="_blank"><img src={image} alt="" srcset="" class="img-fluid content-image"></a>
     {/each}
     {#each parsed.twitter_urls as url}
         <blockquote class="twitter-tweet">
