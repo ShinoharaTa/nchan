@@ -9,24 +9,6 @@
   import { Event, NostrApp, UniqueEventList } from "nosvelte";
   import { writable } from "svelte/store";
   import "websocket-polyfill";
-
-  const title = {
-    name: "設定",
-    imagePath: "",
-  };
-  const prev = {
-    name: "« 戻る",
-    func: () => {
-      goto("/");
-    },
-  };
-  const next = {
-    name: "",
-    func: () => {
-      goto("/settings/keys");
-    },
-  };
-
   const channel_id: string = $page.params.channel_id;
 
   // 取得したイベントを時系列で並べ替える
@@ -42,6 +24,12 @@
     const result = await post(postContent, channel_id);
     if (result) {
       postContent = "";
+    }
+  };
+
+  const submitKeydown = (event: KeyboardEvent) => {
+    if (event.ctrlKey && event.key === "Enter") {
+      submit();
     }
   };
 </script>
@@ -90,7 +78,12 @@
       </section>
       <section class="py-3">
         <div class="text-center">
-          <textarea class="w-100" rows="4" bind:value={postContent}></textarea>
+          <textarea
+            class="w-100"
+            rows="4"
+            bind:value={postContent}
+            on:keydown={submitKeydown}
+          ></textarea>
           <button on:click={submit}>投稿する</button>
         </div>
       </section>
