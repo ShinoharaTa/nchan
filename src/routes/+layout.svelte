@@ -21,12 +21,13 @@
 <div class="h-min-100vh d-flex flex-column">
   <slot />
   <div class="py-2 mt-3 bg-dark text-white mt-auto" style="font-size: 0.8rem;">
-    <div class="container detail text-center footer">Copyright 2024 - T.Shinohara</div>
+    <div class="container detail text-center footer-ios">Copyright 2024 - T.Shinohara</div>
   </div>
 </div>
 
 <style>
   .h-min-100vh {
     min-height: 100vh;
+    min-height: 100dvh;
   }
 </style>
