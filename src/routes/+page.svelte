@@ -6,6 +6,18 @@ import { format, fromUnixTime } from "date-fns";
 import { onMount } from "svelte";
 import { parseCreated } from "$lib/app";
 import Author from "$lib/components/author.svelte";
+import { goto } from "$app/navigation";
+import NavigationBar from "$lib/components/navbar.svelte";
+
+const title = {
+	name: "んちゃんねる",
+};
+const next = {
+	name: "設定",
+	func: () => {
+		goto("/settings/keys");
+	},
+};
 
 let threads = [];
 let loading = true;
@@ -15,21 +27,17 @@ onMount(async () => {
 });
 </script>
 
+<NavigationBar {title} {next} />
+
+<div class="container">
 {#if loading}
   <p>Loading...</p>
 {:else}
-<section class="d-flex align-items-center justify-content-between">
-  <div></div>
-  <h2 class="flex-fill text-center px-3">
-    んちゃんねる
-  </h2>
-  <div><a href="/settings/keys">設定</a></div>
-</section>
 
 <section>
 {#each threads as thread}
   <!-- {JSON.stringify(thread)} -->
-  <div class="mt-3">
+  <div class="mb-3">
     <h2 class="ellipsis">
         <a href="/{thread.id}">{thread.name !== "" ? thread.name : "スレタイなし"}</a>
     </h2>
@@ -42,7 +50,7 @@ onMount(async () => {
       <div class="outline mt-2">
         <div class="ps-2" style="border-left: 6px solid #{event.pubkey.slice(0, 6)};">
           <!-- <div class="detail"><Author hex={event.pubkey} style="simple" /> {parseCreated(event.created_at)}</div> -->
-          <div class="detail">{event.content}</div>
+          <div class="detail text-break">{event.content}</div>
         </div>
       </div>
         {/each}
@@ -58,6 +66,7 @@ onMount(async () => {
   {/each}
 </section>
 {/if}
+</div>
 
 <style>
   .height-limit {

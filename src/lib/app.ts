@@ -71,7 +71,6 @@ import { NostrFetcher } from "nostr-fetch";
 import type { NostrEvent, FetchFilter } from "nostr-fetch";
 import { simplePoolAdapter } from "@nostr-fetch/adapter-nostr-tools";
 import { goto } from "$app/navigation";
-import Thread from "./components/thread.svelte";
 
 export const generateKey = () => {
   const key = generatePrivateKey();

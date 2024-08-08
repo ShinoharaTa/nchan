@@ -2,6 +2,19 @@
 import { generateKey } from "$lib/app";
 import { format, parseISO, subDays, startOfDay, addYears } from "date-fns";
 import { nip19 } from "nostr-tools";
+import { goto } from "$app/navigation";
+import NavigationBar from "$lib/components/navbar.svelte";
+
+const title = {
+	name: "設定",
+	imagePath: ""
+};
+const prev = {
+	name: "« 戻る",
+	func: () => {
+		goto("/");
+	},
+};
 
 let nsec = "";
 let expireString = "";
@@ -38,26 +51,22 @@ const onClickSetOriginalKey = () => {
 };
 </script>
 
-<section class="d-flex align-items-center justify-content-between">
-    <div><a href="/">« 戻る</a></div>
-    <h2 class="flex-fill text-center px-3">
-        んちゃんねる - 設定
-    </h2>
-    <div><a href="/settings/keys">設定</a></div>
-</section>
+<NavigationBar {title} {prev} />
 
-<section>
-    <h4>設定中の秘密鍵</h4>
-    <div>
-        <textarea bind:value={nsec} placeholder="キーを生成してください" class="w-100" rows="3"></textarea>
-    </div>
-    <div>
-        {#if expireString}
-            有効期限：{format(subDays(parseISO(expireString), 1), "yyyy/MM/dd")}
-        {/if}
-    </div>
-    <div>
-        <button on:click={onClickGenerateKey}>キーを新規生成する</button>
-        <button on:click={onClickSetOriginalKey}>入力したキーを使用する</button>
-    </div>
-</section>
+<div class="container">
+	<section>
+		<h4>設定中の秘密鍵</h4>
+		<div>
+			<textarea bind:value={nsec} placeholder="キーを生成してください" class="w-100" rows="3"></textarea>
+		</div>
+		<div>
+			{#if expireString}
+				有効期限：{format(subDays(parseISO(expireString), 1), "yyyy/MM/dd")}
+			{/if}
+		</div>
+		<div>
+			<button on:click={onClickGenerateKey}>キーを新規生成する</button>
+			<button on:click={onClickSetOriginalKey}>入力したキーを使用する</button>
+		</div>
+	</section>
+</div>
