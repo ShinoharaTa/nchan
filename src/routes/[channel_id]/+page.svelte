@@ -1,64 +1,64 @@
 <script lang="ts">
-import { NostrApp, UniqueEventList, Event } from "nosvelte";
-import type { Nostr } from "nosvelte";
-import { format, fromUnixTime } from "date-fns";
-import "websocket-polyfill";
-import { page } from "$app/stores";
-import { writable } from "svelte/store";
-import Post from "$lib/components/post.svelte";
-import { relays, req, post } from "$lib/app";
-import { goto } from "$app/navigation";
-import NavigationBar from "$lib/components/navbar.svelte";
+  import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
+  import { post, relays, req } from "$lib/app";
+  import NavigationBar from "$lib/components/navbar.svelte";
+  import Post from "$lib/components/post.svelte";
+  import { format, fromUnixTime } from "date-fns";
+  import type { Nostr } from "nosvelte";
+  import { Event, NostrApp, UniqueEventList } from "nosvelte";
+  import { writable } from "svelte/store";
+  import "websocket-polyfill";
 
-const title = {
-	name: "設定",
-	imagePath: "",
-};
-const prev = {
-	name: "« 戻る",
-	func: () => {
-		goto("/");
-	},
-};
-const next = {
-	name: "",
-	func: () => {
-		goto("/settings/keys");
-	},
-};
+  const title = {
+    name: "設定",
+    imagePath: "",
+  };
+  const prev = {
+    name: "« 戻る",
+    func: () => {
+      goto("/");
+    },
+  };
+  const next = {
+    name: "",
+    func: () => {
+      goto("/settings/keys");
+    },
+  };
 
-const channel_id: string = $page.params.channel_id;
+  const channel_id: string = $page.params.channel_id;
 
-// 取得したイベントを時系列で並べ替える
-const sorted = (events: Nostr.Event[]) => {
-	return [...events].sort((a, b) => a.created_at - b.created_at);
-};
+  // 取得したイベントを時系列で並べ替える
+  const sorted = (events: Nostr.Event[]) => {
+    return [...events].sort((a, b) => a.created_at - b.created_at);
+  };
 
-const limitLists = [20, 50, 100];
-const selectedLimit = writable(20);
+  const limitLists = [20, 50, 100];
+  const selectedLimit = writable(20);
 
-let postContent = "";
-const submit = async () => {
-	const result = await post(postContent, channel_id);
-	if (result) {
-		postContent = "";
-	}
-};
+  let postContent = "";
+  const submit = async () => {
+    const result = await post(postContent, channel_id);
+    if (result) {
+      postContent = "";
+    }
+  };
 </script>
 
-  <NostrApp {relays}>
-    <UniqueEventList
-      queryKey={["timeline", "feed"]}
-      filters={[
-        {
-          kinds: [42],
-          limit: $selectedLimit,
-          "#e": [channel_id]
-        },
-      ]}
-      {req}
-      let:events
-    >
+<NostrApp {relays}>
+  <UniqueEventList
+    queryKey={["timeline", "feed"]}
+    filters={[
+      {
+        kinds: [42],
+        limit: $selectedLimit,
+        "#e": [channel_id],
+      },
+    ]}
+    {req}
+    let:events
+  >
     <div slot="loading" class="container">
       <p>Loading...</p>
     </div>
@@ -66,7 +66,11 @@ const submit = async () => {
       <p>{error}</p>
     </div>
     <Event queryKey={[]} id={channel_id} let:event>
-      <NavigationBar title={{name: JSON.parse(event.content).name ?? "タイトルなし"}} {prev} {next} >
+      <NavigationBar
+        title={{ name: JSON.parse(event.content).name ?? "タイトルなし" }}
+        {prev}
+        {next}
+      >
         <!-- <section class="d-flex align-items-center justify-content-between">
           <div>
             表示件数
@@ -92,5 +96,5 @@ const submit = async () => {
         </div>
       </section>
     </div>
-    </UniqueEventList>
-  </NostrApp>
+  </UniqueEventList>
+</NostrApp>

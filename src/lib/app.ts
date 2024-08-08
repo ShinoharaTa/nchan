@@ -65,7 +65,14 @@ initKey();
 
 import { generatePrivateKey, finishEvent, Kind, SimplePool } from "nostr-tools";
 import type { EventTemplate, Event } from "nostr-tools";
-import { addDays, startOfDay, format, parseISO, isAfter, fromUnixTime } from "date-fns";
+import {
+  addDays,
+  startOfDay,
+  format,
+  parseISO,
+  isAfter,
+  fromUnixTime,
+} from "date-fns";
 const pool = new SimplePool();
 import { NostrFetcher } from "nostr-fetch";
 import type { NostrEvent, FetchFilter } from "nostr-fetch";
@@ -142,7 +149,7 @@ type SingleThread = {
     pubkey: string;
     created_at: number;
   }[];
-}
+};
 
 export const getThreadList = async (): Promise<SingleThread[]> => {
   const result = await pool.get(relays, {
@@ -152,4 +159,5 @@ export const getThreadList = async (): Promise<SingleThread[]> => {
   return result ? JSON.parse(result.content) : [];
 };
 
-export const parseCreated = (time: number) => format(fromUnixTime(time), "yyyy/MM/dd HH:mm")
+export const parseCreated = (time: number) =>
+  format(fromUnixTime(time), "yyyy/MM/dd HH:mm");

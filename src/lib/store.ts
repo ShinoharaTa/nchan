@@ -3,7 +3,7 @@ import { writable } from "svelte/store";
 export const navigation = writable({
   title: {
     name: "",
-    imagePath: ""
+    imagePath: "",
   },
   prev: {
     name: "",
