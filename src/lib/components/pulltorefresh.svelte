@@ -1,37 +1,48 @@
 <script lang="ts">
-  import { createEventDispatcher, onDestroy, onMount } from 'svelte';
+  import { createEventDispatcher, onDestroy, onMount } from "svelte";
 
   const dispatch = createEventDispatcher();
 
   let touchStartY = 0;
   let touchMoveY = 0;
+  let isLoading = false;
 
   function handleTouchStart(event: TouchEvent) {
+    if (isLoading) return;
     touchStartY = event.touches[0].clientY;
   }
 
   function handleTouchMove(event: TouchEvent) {
+    if (isLoading) return;
     touchMoveY = event.touches[0].clientY;
-    if (touchMoveY - touchStartY > 100) {
-      // カスタムイベントを発火
-      dispatch('refresh');
-      // デフォルトのpull-to-refreshを無効化
+    const pullDistance = touchMoveY - touchStartY;
+    if (pullDistance > 64) {
       event.preventDefault();
+      event.stopPropagation();
+      dispatch("refresh");
+      isLoading = true;
     }
   }
 
   onMount(() => {
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
   });
 
   onDestroy(() => {
-    window.removeEventListener('touchstart', handleTouchStart);
-    window.removeEventListener('touchmove', handleTouchMove);
+    window.removeEventListener("touchstart", handleTouchStart);
+    window.removeEventListener("touchmove", handleTouchMove);
   });
+
+  export const stopLoading = () => {
+    isLoading = false;
+  }
 </script>
 
 <div class="pull-to-refresh">
+  {#if isLoading}
+    <div class="loading">Loading...</div>
+  {/if}
   <slot />
 </div>
 
