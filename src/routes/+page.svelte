@@ -31,11 +31,11 @@
       {#each threads as thread}
         <!-- {JSON.stringify(thread)} -->
         <div class="mb-3">
-          <h2 class="ellipsis">
+          <h4 class="ellipsis">
             <a href="/{thread.id}"
               >{thread.name !== "" ? thread.name : "スレタイなし"}</a
             >
-          </h2>
+          </h4>
           <div class="detail">
             <Author hex={thread.author} />
             Latest update: {parseCreated(thread.latest_update)}
