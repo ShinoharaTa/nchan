@@ -9,17 +9,12 @@
 
   let threads = [];
   let loading = true;
-  let pullToRefreshComponent: {
-    stopLoading: () => void;
-  };
-
   onMount(async () => {
     threads = await getThreadList();
     loading = false;
   });
   const handleRefresh = async () => {
     threads = await getThreadList();
-    pullToRefreshComponent.stopLoading()
   };
 </script>
 
@@ -36,7 +31,7 @@
   {#if loading}
     <p>Loading...</p>
   {:else}
-    <PullToRefresh on:refresh={handleRefresh} bind:this={pullToRefreshComponent}>
+    <PullToRefresh on:refresh={handleRefresh}>
       <section>
         {#each threads as thread}
           <!-- {JSON.stringify(thread)} -->
