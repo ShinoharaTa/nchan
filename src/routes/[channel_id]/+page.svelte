@@ -1,10 +1,8 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { post, relays, req } from "$lib/app";
   import NavigationBar from "$lib/components/navbar.svelte";
   import Post from "$lib/components/post.svelte";
-  import { format, fromUnixTime } from "date-fns";
+  import { post, relays, req } from "$lib/nostr";
   import type { Nostr } from "nosvelte";
   import { Event, NostrApp, UniqueEventList } from "nosvelte";
   import { writable } from "svelte/store";

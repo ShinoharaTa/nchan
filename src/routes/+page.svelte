@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { getThreadList, parseCreated } from "$lib/app";
+  import { parseCreated } from "$lib/app";
   import Author from "$lib/components/author.svelte";
   import NavigationBar from "$lib/components/navbar.svelte";
+  import { getThreadList } from "$lib/nostr";
   import { onMount } from "svelte";
   import "websocket-polyfill";
 

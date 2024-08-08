@@ -1,35 +1,26 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { generateKey } from "$lib/app";
   import NavigationBar from "$lib/components/navbar.svelte";
+  import { generateKey } from "$lib/nostr";
+  import { expire, getSeckey, saveToLocalStorage } from "$lib/store";
   import { addYears, format, parseISO, startOfDay, subDays } from "date-fns";
   import { nip19 } from "nostr-tools";
-
-  const title = {
-    name: "設定",
-    imagePath: "",
-  };
-  const prev = {
-    name: "« 戻る",
-    func: () => {
-      goto("/");
-    },
-  };
+  import { get } from "svelte/store";
 
   let nsec = "";
   let expireString = "";
   if (typeof window !== "undefined") {
-    const hex = localStorage.getItem("nchan_private_key") ?? "";
+    const hex = getSeckey();
     nsec = hex ? nip19.nsecEncode(hex) : "";
-    expireString = localStorage.getItem("nchan_private_key_expire") ?? "";
+    expireString = get(expire) ?? "";
   }
-  //   localStorage.removeItem("nchan_private_key");
-  //   localStorage.removeItem("nchan_private_key_expire");
+
   const onClickGenerateKey = () => {
     if (window.confirm("現在のキーを破棄して新規キーを生成しますか？")) {
-      const { key, expireDate } = generateKey();
+      const { key, expire } = generateKey();
+      saveToLocalStorage(key, expire);
       nsec = nip19.nsecEncode(key);
-      expireString = expireDate;
+      expireString = expire;
     }
   };
 
@@ -40,12 +31,11 @@
         window.alert("nsecで始まる秘密鍵をいれるんや");
         return;
       }
-      localStorage.setItem("nchan_private_key", decode.data);
       const expireDate = format(
         startOfDay(addYears(new Date(), 1)),
         "yyyy-MM-dd'T'HH:mm:ss.SSSxxx",
       );
-      localStorage.setItem("nchan_private_key_expire", expireDate);
+      saveToLocalStorage(decode.data, expireDate);
       expireString = expireDate;
     }
   };
