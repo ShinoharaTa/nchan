@@ -21,7 +21,6 @@
   <div slot="right">
     <a href="/settings/keys"><img src="/gear.svg" alt="" height="24px" /></a>
   </div>
-  うんこ
 </NavigationBar>
 
 <div class="container">
