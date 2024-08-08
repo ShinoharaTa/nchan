@@ -54,7 +54,7 @@
       <p>{error}</p>
     </div>
     <Event queryKey={[]} id={channel_id} let:event>
-      <NavigationBar>
+      <NavigationBar addHeight={32}>
         <div slot="left">
           <a href="/">
             <img src="/left.svg" alt="" height="24px" />
@@ -65,7 +65,7 @@
             <img src="/gear.svg" alt="" height="24px" />
           </a>
         </div>
-        <div class="mt-2 fs-4 ellipsis">
+        <div class="mt-2 ellipsis">
           {JSON.parse(event.content).name ?? "タイトルなし"}
         </div>
       </NavigationBar>

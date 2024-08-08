@@ -1,4 +1,8 @@
-<div class="container bg-light sticky-top py-2">
+<script lang="ts">
+  export let addHeight = 0
+</script>
+
+<div class="container bg-light fixed-top py-2">
   <section class="d-flex align-items-center">
     <div class="flex-shrink-0">
       <slot name="left" />
@@ -14,3 +18,11 @@
     <slot />
   </section>
 </div>
+<div class="header-padding"></div>
+<div style="height: {addHeight}px"></div>
+
+<style>
+  .header-padding {
+    height: 64px;
+  }
+</style>
