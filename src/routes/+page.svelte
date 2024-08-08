@@ -13,6 +13,9 @@
     threads = await getThreadList();
     loading = false;
   });
+  const handleRefresh = async () => {
+    threads = await getThreadList();
+  };
 </script>
 
 <NavigationBar>
@@ -28,7 +31,7 @@
   {#if loading}
     <p>Loading...</p>
   {:else}
-    <PullToRefresh>
+    <PullToRefresh on:refresh={handleRefresh}>
       <section>
         {#each threads as thread}
           <!-- {JSON.stringify(thread)} -->
@@ -56,7 +59,7 @@
               {/each}
             </div>
           </div>
-  
+
           <style>
             .detail {
               font-size: 0.8rem;
