@@ -7,7 +7,7 @@
   const parsed = parseContent(event.content);
 </script>
 
-<div class="outline mt-3">
+<div class="outline mb-3">
   <div class="ps-2" style="border-left: 6px solid #{event.pubkey.slice(0, 6)};">
     <div class="detail pt-1">
       <Author hex={event.pubkey} style="simple" />

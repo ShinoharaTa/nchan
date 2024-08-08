@@ -1,0 +1,13 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="24" height="24" color="#000000">
+	<defs>
+		<style>
+			.cls-63ce7424ea57ea6c8380054e-1{fill:none;stroke:currentColor;stroke-miterlimit:10;}
+		</style>
+	</defs>
+	<circle class="cls-63ce7424ea57ea6c8380054e-1" cx="12" cy="12" r="10.5">
+	</circle>
+	<line class="cls-63ce7424ea57ea6c8380054e-1" x1="17.73" y1="12" x2="6.27" y2="12">
+	</line>
+	<polyline class="cls-63ce7424ea57ea6c8380054e-1" points="11.04 16.77 6.27 12 11.04 7.23">
+	</polyline>
+</svg>

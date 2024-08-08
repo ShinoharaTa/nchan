@@ -66,21 +66,20 @@
       <p>{error}</p>
     </div>
     <Event queryKey={[]} id={channel_id} let:event>
-      <NavigationBar
-        title={{ name: JSON.parse(event.content).name ?? "タイトルなし" }}
-        {prev}
-        {next}
-      >
-        <!-- <section class="d-flex align-items-center justify-content-between">
-          <div>
-            表示件数
-            <select bind:value={$selectedLimit}>
-              {#each limitLists as limit}
-                <option value={limit}>{limit}件</option>
-              {/each}
-            </select>
-          </div>
-        </section> -->
+      <NavigationBar>
+        <div slot="left">
+          <a href="/">
+            <img src="/left.svg" alt="" height="24px" />
+          </a>
+        </div>
+        <div slot="right">
+          <a href="/settings/keys">
+            <img src="/gear.svg" alt="" height="24px" />
+          </a>
+        </div>
+        <div class="mt-2 fs-4 ellipsis">
+          {JSON.parse(event.content).name ?? "タイトルなし"}
+        </div>
       </NavigationBar>
     </Event>
     <div class="container">

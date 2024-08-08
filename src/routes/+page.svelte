@@ -3,20 +3,8 @@
   import { getThreadList, parseCreated } from "$lib/app";
   import Author from "$lib/components/author.svelte";
   import NavigationBar from "$lib/components/navbar.svelte";
-  import { format, fromUnixTime } from "date-fns";
-  import type { Nostr } from "nosvelte";
   import { onMount } from "svelte";
   import "websocket-polyfill";
-
-  const title = {
-    name: "んちゃんねる",
-  };
-  const next = {
-    name: "設定",
-    func: () => {
-      goto("/settings/keys");
-    },
-  };
 
   let threads = [];
   let loading = true;
@@ -26,7 +14,15 @@
   });
 </script>
 
-<NavigationBar {title} {next} />
+<NavigationBar>
+  <div slot="left">
+    <img src="/blank.svg" alt="" height="24px" />
+  </div>
+  <div slot="right">
+    <a href="/settings/keys"><img src="/gear.svg" alt="" height="24px" /></a>
+  </div>
+  うんこ
+</NavigationBar>
 
 <div class="container">
   {#if loading}
