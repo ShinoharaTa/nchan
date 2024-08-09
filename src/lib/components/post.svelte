@@ -13,13 +13,12 @@
 
 <div class="outline mb-3">
   <div class="ps-2" style="border-left: 6px solid #{event.pubkey.slice(0, 6)};">
-    <div class="detail pt-1" id="{reply}">
+    <div class="detail pt-1" id={reply}>
       <strong>名無しの{event.pubkey.slice(0, 6)}さん</strong>
       {parseCreated(event.created_at)}
-      ID:{event.id.slice(0, 6)}
     </div>
     {#if reply}
-      <div><a href="#{reply}">{`>>${reply}`}</a></div>
+      <div><a href="javascript: void(0);">{`>>${reply}`}</a></div>
     {/if}
     <div class="content lf text-break">{parsed.text_without_urls}</div>
     <div class="content lf text-break">{parsed.other_urls}</div>
@@ -33,6 +32,12 @@
         <a href={url}>{url}</a>
       </blockquote>
     {/each}
+    <div class="d-flex justify-content-between align-items-center">
+      <div></div>
+      <div>
+        ID:{event.id.slice(0, 10)}
+      </div>
+    </div>
   </div>
 </div>
 
