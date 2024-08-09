@@ -40,7 +40,20 @@
       <input type="text" bind:value={name} class="w-100" />
       <div class="mt-3">スレッド詳細</div>
       <textarea class="w-100" rows="4" bind:value={about}></textarea>
-      <button on:click={submit}>新規スレッド</button>
+      <div class="mt-2 text-danger note">
+        新規スレが一覧に反映されるまで、仕組みの都合上、最大5分ほど待つ場合があります。<br
+        />
+        ※鯖落ちのときは諦めて。
+      </div>
+      <div class="mt-3">
+        <button on:click={submit}>新規スレッド</button>
+      </div>
     </div>
   </section>
 </div>
+
+<style>
+  .note {
+    font-size: 0.8rem;
+  }
+</style>
