@@ -32,6 +32,19 @@
   };
 </script>
 
+<NavigationBar>
+  <div slot="left">
+    <a href="/">
+      <img src="/left.svg" alt="" height="24px" />
+    </a>
+  </div>
+  <div slot="right">
+    <a href="/settings/keys">
+      <img src="/gear.svg" alt="" height="24px" />
+    </a>
+  </div>
+</NavigationBar>
+
 <NostrApp {relays}>
   <UniqueEventList
     queryKey={["timeline", "feed"]}
@@ -51,24 +64,12 @@
     <div slot="error" let:error class="container">
       <p>{error}</p>
     </div>
-    <Event queryKey={[]} id={channel_id} let:event>
-      <NavigationBar addHeight={32}>
-        <div slot="left">
-          <a href="/">
-            <img src="/left.svg" alt="" height="24px" />
-          </a>
-        </div>
-        <div slot="right">
-          <a href="/settings/keys">
-            <img src="/gear.svg" alt="" height="24px" />
-          </a>
-        </div>
-        <div class="mt-2 ellipsis">
+    <div class="container">
+      <Event queryKey={[]} id={channel_id} let:event>
+        <div class="mb-2 ellipsis">
           {JSON.parse(event.content).name ?? "タイトルなし"}
         </div>
-      </NavigationBar>
-    </Event>
-    <div class="container">
+      </Event>
       <section>
         {#each sorted(events) as event (event.id)}
           <Post {event} />
