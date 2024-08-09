@@ -9,6 +9,7 @@
     (tag) => tag.includes("e") && tag.includes("reply"),
   );
   const reply = reply_tag ? reply_tag[1].slice(0, 10) : null;
+  // addReply(id: string)
 </script>
 
 <div class="outline mb-3">
@@ -32,8 +33,12 @@
         <a href={url}>{url}</a>
       </blockquote>
     {/each}
-    <div class="d-flex justify-content-between align-items-center">
-      <div></div>
+    <div class="d-flex justify-content-between align-items-center py-2">
+      <div>
+        <!-- <a href="javascript: void(0)" on:click={addReply(event.id)}
+          ><img src="/reply.svg" alt="" height="18px" /></a
+        > -->
+      </div>
       <div>
         ID:{event.id.slice(0, 10)}
       </div>
