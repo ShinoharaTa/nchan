@@ -26,30 +26,33 @@ export const generateKey = () => {
   return { key, expire };
 };
 
-export const post = async (content: string, thread: string) => {
-  let seckey = getSeckey();
-  if (!seckey) {
-    if (
-      window.confirm("匿名投稿しますか？\n今日のみ有効なキーを自動生成します。")
-    ) {
-      // キー生成
-      const { key, expire } = generateKey();
-      saveToLocalStorage(key, expire);
-      seckey = key;
-    } else {
-      if (
-        window.confirm(
-          "秘密鍵を登録しますか？\n投稿を破棄して設定ページを開きます。"
-        )
-      ) {
-        goto("/settings/keys");
-      } else {
-        window.alert("投稿を中止します");
-      }
-      return false;
-    }
+const checkSeckey = () => {
+  const seckey = getSeckey();
+  if (seckey) return seckey;
+  if (
+    window.confirm("匿名投稿しますか？\n今日のみ有効なキーを自動生成します。")
+  ) {
+    // キー生成
+    const { key, expire } = generateKey();
+    saveToLocalStorage(key, expire);
+    return key;
   }
+  if (
+    window.confirm(
+      "秘密鍵を登録しますか？\n投稿を破棄して設定ページを開きます。"
+    )
+  ) {
+    goto("/settings/keys");
+  } else {
+    window.alert("投稿を中止します");
+  }
+  return null;
+};
+
+export const post = async (content: string, thread: string) => {
   // 投稿する
+  const seckey = checkSeckey();
+  if (!seckey) return false;
   const event: EventTemplate<Kind.ChannelMessage> = {
     kind: Kind.ChannelMessage,
     content,
@@ -57,6 +60,30 @@ export const post = async (content: string, thread: string) => {
     created_at: Math.floor(new Date().getTime() / 1000),
   };
   event.tags.push(["e", thread, "", "root"]);
+  const post = finishEvent(event, seckey);
+  new Promise(() => {
+    const pub = pool.publish(relays, post);
+    pub.on("failed", (ev: Event) => {
+      console.error("failed to send event", ev);
+    });
+  });
+  return true;
+};
+
+export const newThread = async (name: string, about: string) => {
+  const seckey = checkSeckey();
+  if (!seckey) return false;
+  const content = {
+    name,
+    about,
+    picture: "",
+  };
+  const event: EventTemplate<Kind.ChannelCreation> = {
+    kind: Kind.ChannelCreation,
+    content: JSON.stringify(content),
+    tags: [],
+    created_at: Math.floor(new Date().getTime() / 1000),
+  };
   const post = finishEvent(event, seckey);
   new Promise(() => {
     const pub = pool.publish(relays, post);

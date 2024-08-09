@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import { parseCreated } from "$lib/app";
   import Author from "$lib/components/author.svelte";
   import NavigationBar from "$lib/components/navbar.svelte";
@@ -12,6 +13,13 @@
     threads = await getThreadList();
     loading = false;
   });
+
+  const reload = async () => {
+    threads = await getThreadList();
+    loading = false;
+  };
+
+  const newThread = () => goto("/new");
 </script>
 
 <NavigationBar>
@@ -28,6 +36,10 @@
     <p>Loading...</p>
   {:else}
     <section>
+      <button on:click={newThread}>スレ立て</button>
+      <button on:click={reload}>一覧リロード</button>
+    </section>
+    <section class="mt-3">
       {#each threads as thread}
         <!-- {JSON.stringify(thread)} -->
         <div class="mb-3">
