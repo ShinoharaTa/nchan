@@ -46,6 +46,30 @@ article {
   }
 }
 
+label {
+  display: block;
+}
+
+input {
+  font-size: 1rem;
+  padding: 8px;
+  outline: none;
+  border: 0;
+}
+
+textarea {
+  font-size: 1rem;
+  padding: 8px;
+  height: 4rem;
+  outline: none;
+  border: 0;
+}
+
+button {
+  font-size: 1rem;
+  padding: 8px;
+}
+
 .flex {
   display: flex;
   align-items: center;

@@ -37,29 +37,40 @@
     </a>
   </div>
 </NavigationBar>
-<div class="container">
-  <section class="">
-    <div>
-      <div class="mt-3">スレッドタイトル</div>
-      <input type="text" bind:value={name} class="w-100" />
-      <!-- <div class="mt-3">スレッド詳細</div>
-      <textarea class="w-100" rows="4" bind:value={about}></textarea> -->
-      <div class="mt-3">1スレ目投稿</div>
-      <textarea class="w-100" rows="4" bind:value={postContent}></textarea>
-      <div class="mt-2 text-danger note">
-        新規スレが一覧に反映されるまで、仕組みの都合上、最大5分ほど待つ場合があります。<br
-        />
-        ※鯖落ちのときは諦めて。
-      </div>
-      <div class="mt-3">
-        <button on:click={submit}>新規スレッド</button>
-      </div>
-    </div>
-  </section>
+<div>
+  <label>
+    タイトル:<br />
+    <input type="text" bind:value={name} placeholder="タイトル"/>
+  </label>
+  <!-- <label>
+    スレッド詳細:<br />
+    <textarea bind:value={about}></textarea>
+  </label> -->
+  <label>
+    内容:<br />
+    <textarea bind:value={postContent} placeholder="内容"></textarea>
+  </label>
+  <button on:click={submit}>新規スレッド作成</button>
+  <small>
+    * 新規スレが一覧に反映されるまで、仕組みの都合上、最大5分ほど待つ場合があります。<br />
+    * 鯖落ちのときは諦めて。
+  </small>
 </div>
 
 <style>
-  .note {
-    font-size: 0.8rem;
+  label {
+    margin-bottom: 12px;
+  }
+  input,
+  textarea {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 4px;
+  }
+  button {
+    margin-bottom: 12px;
+  }
+  small {
+    display: block;
   }
 </style>
