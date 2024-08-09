@@ -10,7 +10,7 @@ const initKey = () => {
 initKey();
 
 export const parseCreated = (time: number) =>
-  format(fromUnixTime(time), "yyyy/MM/dd HH:mm");
+  format(fromUnixTime(time), "yyyy/MM/dd HH:mm:ss");
 
 export function parseContent(text: string) {
   const urlPattern = /(https?:\/\/[^\s]+)/g;
