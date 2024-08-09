@@ -72,7 +72,7 @@ export const post = async (content: string, thread: string) => {
 
 export const newThread = async (name: string, about: string) => {
   const seckey = checkSeckey();
-  if (!seckey) return false;
+  if (!seckey) return null;
   const content = {
     name,
     about,
@@ -91,7 +91,7 @@ export const newThread = async (name: string, about: string) => {
       console.error("failed to send event", ev);
     });
   });
-  return true;
+  return post.id;
 };
 
 const fetcher = NostrFetcher.withCustomPool(simplePoolAdapter(pool));
