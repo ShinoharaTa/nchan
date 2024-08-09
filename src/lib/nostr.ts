@@ -76,7 +76,7 @@ export const newThread = async (name: string, about: string) => {
   const content = {
     name,
     about,
-    picture: "",
+    picture: "https://nchan.shino3.net/channel_img.png",
   };
   const event: EventTemplate<Kind.ChannelCreation> = {
     kind: Kind.ChannelCreation,
