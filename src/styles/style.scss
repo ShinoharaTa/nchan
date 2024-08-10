@@ -3,6 +3,7 @@ $background: #EEE;
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -52,9 +53,13 @@ article {
 
 label {
   display: block;
+  margin-bottom: 12px;
 }
 
 input {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 4px;
   font-size: 1rem;
   padding: 8px;
   outline: none;
@@ -62,9 +67,12 @@ input {
 }
 
 textarea {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 4px;
   font-size: 1rem;
   padding: 8px;
-  height: 4rem;
+  height: 6rem;
   outline: none;
   border: 0;
 }
@@ -86,4 +94,9 @@ button {
 
 .flex-between {
   justify-content: space-between;
+}
+
+.center {
+  text-align: center;
+  margin: 0 auto;
 }

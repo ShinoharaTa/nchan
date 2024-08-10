@@ -58,34 +58,32 @@
     {req}
     let:events
   >
-    <div slot="loading" class="container">
-      <p>Loading...</p>
-    </div>
-    <div slot="error" let:error class="container">
-      <p>{error}</p>
-    </div>
-    <div class="container">
-      <Event queryKey={[]} id={channel_id} let:event>
-        <div class="mb-2 ellipsis">
-          {JSON.parse(event.content).name ?? "タイトルなし"}
-        </div>
-      </Event>
-      <section>
-        {#each sorted(events) as event (event.id)}
-          <Post {event} />
-        {/each}
-      </section>
-      <section class="py-3">
-        <div class="text-center">
-          <textarea
-            class="w-100"
-            rows="4"
-            bind:value={postContent}
-            on:keydown={submitKeydown}
-          ></textarea>
-          <button on:click={submit}>投稿する</button>
-        </div>
-      </section>
-    </div>
+  <div slot="loading" class="container">
+    <p class="center">Loading...</p>
+  </div>
+  <div slot="error" let:error class="container">
+    <p class="center">{error}</p>
+  </div>
+  <main>
+    <Event queryKey={[]} id={channel_id} let:event>
+      <h2 class="mb-2 ellipsis">
+        {JSON.parse(event.content).name ?? "タイトルなし"}
+      </h2>
+    </Event>
+    <section>
+      {#each sorted(events) as event (event.id)}
+        <Post {event} />
+      {/each}
+    </section>
+    <form>
+      <label>
+        <textarea
+          bind:value={postContent}
+          on:keydown={submitKeydown}
+        ></textarea>
+      </label>
+      <button on:click={submit}>書き込む</button>
+    </form>
+  </main>
   </UniqueEventList>
 </NostrApp>
