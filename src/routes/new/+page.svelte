@@ -58,15 +58,6 @@
 </div>
 
 <style>
-  label {
-    margin-bottom: 12px;
-  }
-  input,
-  textarea {
-    width: 100%;
-    max-width: 600px;
-    margin-top: 4px;
-  }
   button {
     margin-bottom: 12px;
   }
