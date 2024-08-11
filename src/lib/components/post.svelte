@@ -40,4 +40,7 @@
     gap: 4px 8px;
     margin-bottom: 8px;
   }
+  article {
+    padding: 16px 0;
+  }
 </style>

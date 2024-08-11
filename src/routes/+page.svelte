@@ -27,58 +27,55 @@
     <img src="/blank.svg" alt="" height="24px" />
   </div>
   <div slot="right">
-    <a href="/settings/keys"><img src="/gear.svg" alt="" height="24px" /></a>
+    <a href="/settings/keys"><img src="/gear.svg" class="path" alt="" height="24px" /></a>
   </div>
 </NavigationBar>
-
-<div class="container">
+<div>
   {#if loading}
-    <p>Loading...</p>
+    <p class="center">Loading...</p>
   {:else}
+  <div class="flex">
+    <button on:click={newThread}>スレ立て</button>
+    <button on:click={reload}>一覧リロード</button>
+  </div>
+  {#each threads as thread}
+    <!-- {JSON.stringify(thread)} -->
     <section>
-      <button on:click={newThread}>スレ立て</button>
-      <button on:click={reload}>一覧リロード</button>
+      <h2>
+        <a href="/{thread.id}">
+          {thread.name !== "" ? thread.name : "スレタイなし"}
+        </a>
+      </h2>
+      {#each thread.events as event}
+        <article>
+            <p class="ellipsis">
+              <span style="background: #{event.pubkey.slice(0, 6)}">
+                {event.pubkey.slice(0, 6)}
+              </span>
+              {event.content}</p>
+            </article>
+        {/each}
+      <aside class="flex">
+        Latest update: {parseCreated(thread.latest_update)}
+        <Author hex={thread.author} />
+      </aside>
     </section>
-    <section class="mt-3">
-      {#each threads as thread}
-        <!-- {JSON.stringify(thread)} -->
-        <div class="mb-3">
-          <h4 class="ellipsis">
-            <a href="/{thread.id}"
-              >{thread.name !== "" ? thread.name : "スレタイなし"}</a
-            >
-          </h4>
-          <div class="detail">
-            <Author hex={thread.author} />
-            Latest update: {parseCreated(thread.latest_update)}
-          </div>
-          <div class="height-limit">
-            {#each thread.events as event}
-              <div class="outline mt-2">
-                <div
-                  class="ps-2"
-                  style="border-left: 6px solid #{event.pubkey.slice(0, 6)};"
-                >
-                  <!-- <div class="detail"><Author hex={event.pubkey} style="simple" /> {parseCreated(event.created_at)}</div> -->
-                  <div class="detail text-break">{event.content}</div>
-                </div>
-              </div>
-            {/each}
-          </div>
-        </div>
-        <style>
-          .detail {
-            font-size: 0.8rem;
-          }
-        </style>
-      {/each}
-    </section>
+  {/each}
   {/if}
 </div>
 
 <style>
-  .height-limit {
-    overflow-y: hidden;
-    max-height: 120px;
+  section {
+    padding: 16px 0;
+  }
+  article {
+    padding: 2px 0;
+  }
+  aside{
+    margin-top: 12px;
+    font-size: 0.8rem;
+  }
+  h2 {
+    margin-bottom: 12px;
   }
 </style>
