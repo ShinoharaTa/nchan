@@ -43,7 +43,7 @@
 
 <NavigationBar>
   <div slot="left">
-    <a href="/"><img src="/left.svg" alt="" height="24px" /></a>
+    <a href="/"><img src="/left.svg" class="path" alt="" height="24px" /></a>
   </div>
   <div slot="right">
     <img src="/blank.svg" alt="" height="24px" />

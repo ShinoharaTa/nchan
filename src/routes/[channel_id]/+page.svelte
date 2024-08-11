@@ -35,12 +35,12 @@
 <NavigationBar>
   <div slot="left">
     <a href="/">
-      <img src="/left.svg" alt="" height="24px" />
+      <img src="/left.svg" class="path" alt="" height="24px" />
     </a>
   </div>
   <div slot="right">
     <a href="/settings/keys">
-      <img src="/gear.svg" alt="" height="24px" />
+      <img src="/gear.svg" class="path" alt="" height="24px" />
     </a>
   </div>
 </NavigationBar>
