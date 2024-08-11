@@ -49,26 +49,21 @@
     <img src="/blank.svg" alt="" height="24px" />
   </div>
 </NavigationBar>
-
-<div class="container">
-  <section>
-    <h4>設定中の秘密鍵</h4>
-    <div>
-      <textarea
-        bind:value={nsec}
-        placeholder="キーを生成してください"
-        class="w-100"
-        rows="3"
-      ></textarea>
-    </div>
-    <div>
-      {#if expireString}
-        有効期限：{format(subDays(parseISO(expireString), 1), "yyyy/MM/dd")}
-      {/if}
-    </div>
-    <div>
-      <button on:click={onClickGenerateKey}>キーを新規生成する</button>
-      <button on:click={onClickSetOriginalKey}>入力したキーを使用する</button>
-    </div>
-  </section>
+<div>
+  <label>
+    設定中の秘密鍵:<br>
+    <textarea
+      bind:value={nsec}
+      placeholder="キーを生成してください"
+    ></textarea>
+  </label>
+  <div>
+    {#if expireString}
+      有効期限：{format(subDays(parseISO(expireString), 1), "yyyy/MM/dd")}
+    {/if}
+  </div>
+  <div class="flex">
+    <button on:click={onClickGenerateKey}>キーを新規生成する</button>
+    <button on:click={onClickSetOriginalKey}>入力したキーを使用する</button>
+  </div>
 </div>
