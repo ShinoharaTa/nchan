@@ -46,7 +46,7 @@
           {thread.name !== "" ? thread.name : "スレタイなし"}
         </a>
       </h2>
-      {#each thread.events as event}
+      {#each thread.events.reverse() as event}
         <article>
             <p class="ellipsis">
               <span style="background: #{event.pubkey.slice(0, 6)}">
