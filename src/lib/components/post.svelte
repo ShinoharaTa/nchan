@@ -12,46 +12,35 @@
   // addReply(id: string)
 </script>
 
-<div class="outline mb-3">
-  <div class="ps-2" style="border-left: 6px solid #{event.pubkey.slice(0, 6)};">
-    <div class="detail pt-1" id={reply}>
-      <strong>名無しの{event.pubkey.slice(0, 6)}さん</strong>
-      {parseCreated(event.created_at)}
-    </div>
-    {#if reply}
-      <div><a href="javascript: void(0);">{`>>${reply}`}</a></div>
-    {/if}
-    <div class="content lf text-break">{parsed.text_without_urls}</div>
-    <div class="content lf text-break">{parsed.other_urls}</div>
-    {#each parsed.image_urls as image}
-      <a href={image} target="_blank"
-        ><img src={image} alt="" srcset="" class="img-fluid content-image" /></a
-      >
-    {/each}
-    {#each parsed.twitter_urls as url}
-      <blockquote class="twitter-tweet text-break">
-        <a href={url}>{url}</a>
-      </blockquote>
-    {/each}
-    <div class="d-flex justify-content-between align-items-center py-2">
-      <div>
-        <!-- <a href="javascript: void(0)" on:click={addReply(event.id)}
-          ><img src="/reply.svg" alt="" height="18px" /></a
-        > -->
-      </div>
-      <div>
-        ID:{event.id.slice(0, 10)}
-      </div>
-    </div>
+<article>
+  <div class="flex">
+    <h3 style="color: #{event.pubkey.slice(0, 6)};">んちゃんねるから{event.pubkey.slice(0, 6)}がお送りします</h3>
+    <time data-time="{parseCreated(event.created_at)}">:{parseCreated(event.created_at)}</time>
+    <aside>ID:{event.id.slice(0, 10)}</aside>
   </div>
-</div>
+  {#if reply}
+      <a href="javascript: void(0);">{`>>${reply}`}</a>
+  {/if}
+  <p>{parsed.text_without_urls}</p>
+  <p>{parsed.other_urls}</p>
+  {#each parsed.image_urls as image}
+    <a href={image} target="_blank">
+      <img src={image} alt="" srcset="" />
+    </a>
+  {/each}
+  {#each parsed.twitter_urls as url}
+    <blockquote>
+      <a href={url}>{url}</a>
+    </blockquote>
+  {/each}
+</article>
 
 <style>
-  .detail {
-    font-size: 0.8rem;
+  .flex {
+    gap: 4px 8px;
+    margin-bottom: 8px;
   }
-
-  .content-image {
-    max-height: 200px;
+  article {
+    padding: 16px 0;
   }
 </style>

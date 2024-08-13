@@ -60,6 +60,7 @@ export const post = async (content: string, thread: string) => {
     created_at: Math.floor(new Date().getTime() / 1000),
   };
   event.tags.push(["e", thread, "", "root"]);
+  event.tags.push(["via", "nchan.shino3.net"]);
   const post = finishEvent(event, seckey);
   new Promise(() => {
     const pub = pool.publish(relays, post);
@@ -84,6 +85,7 @@ export const newThread = async (name: string, about: string) => {
     tags: [],
     created_at: Math.floor(new Date().getTime() / 1000),
   };
+  event.tags.push(["via", "nchan.shino3.net"]);
   const post = finishEvent(event, seckey);
   new Promise(() => {
     const pub = pool.publish(relays, post);

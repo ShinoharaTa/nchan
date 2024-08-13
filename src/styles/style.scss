@@ -1,15 +1,128 @@
-body {
-  font-family: sans-serif;
-  // font-family: initial;
+:root {
+  --background: #eee;
+  --text: #000;
+  --pathColor: invert(0%);
 }
 
-.lf {
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #222;
+    --text: #fff;
+    --pathColor: invert(100%);
+  }
+
+  a {
+    color:cornflowerblue;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 20px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background: var(--background);
+  line-height: 1;
+  color: var(--text);
+}
+
+header {
+  position: sticky;
+  top: 0;
+  padding: 20px 0;
+  background-color: var(--background);
+}
+
+footer {
+  padding: 20px;
+}
+
+p {
+  line-height: 1.4;
   white-space: pre-wrap;
+  word-break: break-all;
+}
+
+article {
+  img {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  a {
+    display: inline-block;
+    padding: 2px;
+  }
+}
+
+label {
+  display: block;
+  margin-bottom: 12px;
+}
+
+input {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 4px;
+  font-size: 1rem;
+  padding: 8px;
+  outline: none;
+  border: 0;
+}
+
+textarea {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 4px;
+  font-size: 1rem;
+  padding: 8px;
+  height: 6rem;
+  outline: none;
+  border: 0;
+}
+
+button {
+  font-size: 1rem;
+  padding: 8px;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  > * {
+    flex-shrink: 0;
+  }
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.center {
+  text-align: center;
+  margin: 0 auto;
 }
 
 .ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
-  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.path {
+  filter: var(--pathColor);
 }
