@@ -19,16 +19,19 @@
   const selectedLimit = writable(20);
 
   let postContent = "";
+  let replyId: string | null = null;
   let anonymous = true;
+
   const submit = async () => {
     const seckey = anonymous ? getAnonymousKey() : getSecKey();
     if (!seckey) {
       alert("投稿するには鍵の生成または登録が必要です");
       return;
     }
-    const result = await post(postContent, channel_id, seckey);
+    const result = await post(postContent, channel_id, seckey, replyId);
     if (result) {
       postContent = "";
+      replyId = null;
     }
   };
 
@@ -79,10 +82,16 @@
       </Event>
       <section>
         {#each sorted(events) as event (event.id)}
-          <Post {event} />
+          <Post {event} on:reply={(e) => (replyId = e.detail.id)} />
         {/each}
       </section>
       <form>
+        {#if replyId}
+          <p>リプライ &gt; {replyId}</p>
+          <button on:click={() => (replyId = null)} type="button" class="small"
+            >リプをキャンセル</button
+          >
+        {/if}
         <label>
           <textarea bind:value={postContent} on:keydown={submitKeydown}
           ></textarea>
@@ -96,7 +105,7 @@
           />
           <label for="anonymous_new_thread">匿名で書き込む</label>
         </div>
-        <button on:click={submit}>書き込む</button>
+        <button on:click={submit} type="button">書き込む</button>
       </form>
     </main>
   </UniqueEventList>

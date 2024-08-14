@@ -18,7 +18,7 @@
     }
     const threadId = await newThread(name, "", seckey);
     if (!threadId) return;
-    const result = await post(postContent, threadId, seckey);
+    const result = await post(postContent, threadId, seckey, null);
     if (result) {
       alert("新しいスレッドを作成しました");
       name = "";
