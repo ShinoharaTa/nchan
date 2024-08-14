@@ -1,38 +1,77 @@
 import { writable, get } from "svelte/store";
 
-export const seckey = writable<string | null>(null);
-export const expire = writable<string | null>(null);
+const seckey = writable<string | null>(null);
+const anonymous = writable<string | null>(null);
+const expire = writable<string | null>(null);
 
-// ローカルストレージからseckeyとexpireを取得する関数
+function getLocalStorage() {
+  try {
+    const localStorageItem = localStorage.getItem("nchan_keys_v1");
+    const parsed = JSON.parse(localStorageItem ?? "");
+    seckey.set(parsed.seckey);
+    anonymous.set(parsed.seckey);
+    expire.set(parsed.seckey);
+  } catch (e) {
+    console.error("loading initian keys.");
+    seckey.set(null);
+    anonymous.set(null);
+    expire.set(null);
+  }
+}
+
+function setLocalStorage() {
+  const keys = {
+    seckey: get(seckey),
+    anonymous: get(anonymous),
+    expire: get(expire),
+  };
+  const keysString = JSON.stringify(keys);
+  localStorage.setItem("nchan_keys_v1", keysString);
+}
+
 export function initializeStores() {
-  const storedSeckey = localStorage.getItem("nchan_private_key");
-  const storedExpire = localStorage.getItem("nchan_private_key_expire");
-
-  seckey.set(storedSeckey ? storedSeckey : null);
-  expire.set(storedExpire ? storedExpire : null);
+  localStorage.removeItem("nchan_private_key");
+  localStorage.removeItem("nchan_private_key_expire");
+  getLocalStorage();
 }
 
 // seckeyとexpireをローカルストレージに保存する関数
-export function saveToLocalStorage(newSeckey: string, newExpire: string) {
-  localStorage.setItem("nchan_private_key", newSeckey);
-  localStorage.setItem("nchan_private_key_expire", newExpire);
-  seckey.set(newSeckey);
+export function saveToAnonymousKey(newSeckey: string, newExpire: string) {
+  anonymous.set(newSeckey);
   expire.set(newExpire);
+  setLocalStorage();
+}
+
+export function saveToIdentifiedKey(newSeckey: string) {
+  seckey.set(newSeckey);
+  setLocalStorage();
+}
+
+export function removeIdentifiedKey() {
+  deleteSeckey();
 }
 
 // seckeyとexpireを破棄する関数
-export function clearStores() {
-  localStorage.removeItem("nchan_private_key");
-  localStorage.removeItem("nchan_private_key_expire");
-  seckey.set(null);
+function clearAnonymous() {
   expire.set(null);
+  anonymous.set(null);
+  setLocalStorage();
 }
 
-export function getSeckey(): string | null {
-  const currentExpire = localStorage.getItem("nchan_private_key_expire");
+function deleteSeckey() {
+  seckey.set(null);
+  setLocalStorage();
+}
+
+export function getAnonymousKey(): string | null {
+  const currentExpire = get(expire);
   if (currentExpire && new Date(currentExpire) > new Date()) {
-    return get(seckey);
+    return get(anonymous);
   }
-  clearStores();
+  clearAnonymous();
   return null;
+}
+
+export function getSecKey(): string | null {
+  return get(seckey);
 }
