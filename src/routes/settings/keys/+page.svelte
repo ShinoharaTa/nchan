@@ -1,42 +1,52 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import NavigationBar from "$lib/components/navbar.svelte";
   import { generateKey } from "$lib/nostr";
-  import { expire, getSeckey, saveToLocalStorage } from "$lib/store";
-  import { addYears, format, parseISO, startOfDay, subDays } from "date-fns";
+  import {
+    getAnonymousKey,
+    getSecKey,
+    removeIdentifiedKey,
+    saveToAnonymousKey,
+    saveToIdentifiedKey,
+  } from "$lib/store";
   import { nip19 } from "nostr-tools";
-  import { get } from "svelte/store";
 
-  let nsec = "";
-  let expireString = "";
+  let identifiedNsec: string | null;
+  let anonymousNsec: string | null;
   if (typeof window !== "undefined") {
-    const hex = getSeckey();
-    nsec = hex ? nip19.nsecEncode(hex) : "";
-    expireString = get(expire) ?? "";
+    const anonymous = getAnonymousKey();
+    const identified = getSecKey();
+    // expireString = get
+    anonymousNsec = anonymous ? nip19.nsecEncode(anonymous) : "";
+    identifiedNsec = identified ? nip19.nsecEncode(identified) : "";
   }
 
   const onClickGenerateKey = () => {
     if (window.confirm("現在のキーを破棄して新規キーを生成しますか？")) {
       const { key, expire } = generateKey();
-      saveToLocalStorage(key, expire);
-      nsec = nip19.nsecEncode(key);
-      expireString = expire;
+      saveToAnonymousKey(key, expire);
+      anonymousNsec = nip19.nsecEncode(key);
+      // expireString = expire;
     }
   };
 
-  const onClickSetOriginalKey = () => {
-    if (window.confirm("設定済みのキーを上書きしますか？")) {
-      const decode = nip19.decode(nsec);
+  const onClickSetPrivateKey = () => {
+    try {
+      const decode = nip19.decode(identifiedNsec ?? "");
       if (decode.type !== "nsec") {
-        window.alert("nsecで始まる秘密鍵をいれるんや");
-        return;
+        throw new Error("エラー");
       }
-      const expireDate = format(
-        startOfDay(addYears(new Date(), 1)),
-        "yyyy-MM-dd'T'HH:mm:ss.SSSxxx",
-      );
-      saveToLocalStorage(decode.data, expireDate);
-      expireString = expireDate;
+      saveToIdentifiedKey(decode.data);
+      window.alert("鍵を保存しました。");
+    } catch (e) {
+      window.alert("nsec1xxxxxx..... の秘密鍵を入力してください");
+      return;
+    }
+  };
+
+  const onClickRemovePrivateKey = () => {
+    if (window.confirm("登録済みの秘密鍵を削除してもよろしいですか？")) {
+      removeIdentifiedKey();
+      anonymousNsec = "";
     }
   };
 </script>
@@ -51,19 +61,30 @@
 </NavigationBar>
 <div>
   <label>
-    設定中の秘密鍵:<br>
-    <textarea
-      bind:value={nsec}
-      placeholder="キーを生成してください"
-    ></textarea>
+    匿名秘密鍵(本日のみ):<br />
+    <input
+      type="text"
+      bind:value={anonymousNsec}
+      placeholder="キーがありません"
+      readonly
+    />
   </label>
-  <div>
-    {#if expireString}
-      有効期限：{format(subDays(parseISO(expireString), 1), "yyyy/MM/dd")}
-    {/if}
-  </div>
   <div class="flex">
-    <button on:click={onClickGenerateKey}>キーを新規生成する</button>
-    <button on:click={onClickSetOriginalKey}>入力したキーを使用する</button>
+    <button on:click={onClickGenerateKey}>匿名鍵を使用する</button>
+  </div>
+  <label>
+    <!-- スペース用 -->
+  </label>
+  <label>
+    コテハンに使用する秘密鍵:<br />
+    <input
+      type="text"
+      bind:value={identifiedNsec}
+      placeholder="nsec1..... で始まる鍵を登録"
+    />
+  </label>
+  <div class="flex">
+    <button on:click={onClickSetPrivateKey}>秘密鍵を使用する</button>
+    <button on:click={onClickRemovePrivateKey}>秘密鍵を削除する</button>
   </div>
 </div>

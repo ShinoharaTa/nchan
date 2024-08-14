@@ -7,7 +7,7 @@ import { NostrFetcher } from "nostr-fetch";
 import type { NostrEvent, FetchFilter } from "nostr-fetch";
 import { simplePoolAdapter } from "@nostr-fetch/adapter-nostr-tools";
 import { goto } from "$app/navigation";
-import { saveToLocalStorage, getSeckey } from "./store";
+import { saveToAnonymousKey } from "./store";
 
 export const req = createRxForwardReq();
 
@@ -26,15 +26,14 @@ export const generateKey = () => {
   return { key, expire };
 };
 
-const checkSeckey = () => {
-  const seckey = getSeckey();
+const checkSeckey = (seckey: string | null) => {
   if (seckey) return seckey;
   if (
     window.confirm("匿名投稿しますか？\n今日のみ有効なキーを自動生成します。")
   ) {
     // キー生成
     const { key, expire } = generateKey();
-    saveToLocalStorage(key, expire);
+    saveToAnonymousKey(key, expire);
     return key;
   }
   if (
@@ -49,10 +48,7 @@ const checkSeckey = () => {
   return null;
 };
 
-export const post = async (content: string, thread: string) => {
-  // 投稿する
-  const seckey = checkSeckey();
-  if (!seckey) return false;
+export const post = async (content: string, thread: string, seckey: string) => {
   const event: EventTemplate<Kind.ChannelMessage> = {
     kind: Kind.ChannelMessage,
     content,
@@ -71,9 +67,11 @@ export const post = async (content: string, thread: string) => {
   return true;
 };
 
-export const newThread = async (name: string, about: string) => {
-  const seckey = checkSeckey();
-  if (!seckey) return null;
+export const newThread = async (
+  name: string,
+  about: string,
+  seckey: string
+) => {
   const content = {
     name,
     about,
