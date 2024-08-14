@@ -3,6 +3,7 @@
   import NavigationBar from "$lib/components/navbar.svelte";
   import Post from "$lib/components/post.svelte";
   import { post, relays, req } from "$lib/nostr";
+  import { getAnonymousKey, getSecKey } from "$lib/store";
   import type { Nostr } from "nosvelte";
   import { Event, NostrApp, UniqueEventList } from "nosvelte";
   import { writable } from "svelte/store";
@@ -18,8 +19,14 @@
   const selectedLimit = writable(20);
 
   let postContent = "";
+  let anonymous = true;
   const submit = async () => {
-    const result = await post(postContent, channel_id);
+    const seckey = anonymous ? getAnonymousKey() : getSecKey();
+    if (!seckey) {
+      alert("投稿するには鍵の生成または登録が必要です");
+      return;
+    }
+    const result = await post(postContent, channel_id, seckey);
     if (result) {
       postContent = "";
     }
@@ -58,32 +65,39 @@
     {req}
     let:events
   >
-  <div slot="loading" class="container">
-    <p class="center">Loading...</p>
-  </div>
-  <div slot="error" let:error class="container">
-    <p class="center">{error}</p>
-  </div>
-  <main>
-    <Event queryKey={[]} id={channel_id} let:event>
-      <h2 class="mb-2 ellipsis">
-        {JSON.parse(event.content).name ?? "タイトルなし"}
-      </h2>
-    </Event>
-    <section>
-      {#each sorted(events) as event (event.id)}
-        <Post {event} />
-      {/each}
-    </section>
-    <form>
-      <label>
-        <textarea
-          bind:value={postContent}
-          on:keydown={submitKeydown}
-        ></textarea>
-      </label>
-      <button on:click={submit}>書き込む</button>
-    </form>
-  </main>
+    <div slot="loading" class="container">
+      <p class="center">Loading...</p>
+    </div>
+    <div slot="error" let:error class="container">
+      <p class="center">{error}</p>
+    </div>
+    <main>
+      <Event queryKey={[]} id={channel_id} let:event>
+        <h2 class="mb-2 ellipsis">
+          {JSON.parse(event.content).name ?? "タイトルなし"}
+        </h2>
+      </Event>
+      <section>
+        {#each sorted(events) as event (event.id)}
+          <Post {event} />
+        {/each}
+      </section>
+      <form>
+        <label>
+          <textarea bind:value={postContent} on:keydown={submitKeydown}
+          ></textarea>
+        </label>
+        <div class="flex">
+          <input
+            id="anonymous_new_thread"
+            name="anonymous_new_thread"
+            type="checkbox"
+            bind:checked={anonymous}
+          />
+          <label for="anonymous_new_thread">匿名で書き込む</label>
+        </div>
+        <button on:click={submit}>書き込む</button>
+      </form>
+    </main>
   </UniqueEventList>
 </NostrApp>
