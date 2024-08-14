@@ -100,8 +100,11 @@ textarea {
 }
 
 button {
+  border: none;
+  background-color: #ddd;
+  outline: 0;
   font-size: 1rem;
-  padding: 8px;
+  padding: 6px 18px;
 }
 
 .flex {
