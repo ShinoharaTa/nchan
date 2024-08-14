@@ -14,15 +14,25 @@
 
 <article>
   <div class="flex">
-    <h3 style="color: #{event.pubkey.slice(0, 6)};">んちゃんねるから{event.pubkey.slice(0, 6)}がお送りします</h3>
-    <time data-time="{parseCreated(event.created_at)}">:{parseCreated(event.created_at)}</time>
+    <h3 style="color: #{event.pubkey.slice(0, 6)};">
+      んちゃんねるから{event.pubkey.slice(0, 6)}がお送りします
+    </h3>
+    <time data-time={parseCreated(event.created_at)}
+      >:{parseCreated(event.created_at)}</time
+    >
     <aside>ID:{event.id.slice(0, 10)}</aside>
   </div>
   {#if reply}
-      <a href="javascript: void(0);">{`>>${reply}`}</a>
+    <a href="javascript: void(0);">{`>>${reply}`}</a>
   {/if}
   <p>{parsed.text_without_urls}</p>
-  <p>{parsed.other_urls}</p>
+  {#each parsed.other_urls as url}
+    <p>
+      <a href={url} target="_blank">
+        {url}
+      </a>
+    </p>
+  {/each}
   {#each parsed.image_urls as image}
     <a href={image} target="_blank">
       <img src={image} alt="" srcset="" />
