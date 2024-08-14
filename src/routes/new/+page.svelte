@@ -12,7 +12,10 @@
 
   const submit = async () => {
     const seckey = anonymous ? getAnonymousKey() : getSecKey();
-    if (!seckey) return;
+    if (!seckey) {
+      alert("投稿するには鍵の生成または登録が必要です");
+      return;
+    }
     const threadId = await newThread(name, "", seckey);
     if (!threadId) return;
     const result = await post(postContent, threadId, seckey);
@@ -41,10 +44,6 @@
     タイトル:<br />
     <input type="text" bind:value={name} placeholder="タイトル" />
   </label>
-  <!-- <label>
-    スレッド詳細:<br />
-    <textarea bind:value={about}></textarea>
-  </label> -->
   <label>
     内容:<br />
     <textarea bind:value={postContent} placeholder="内容"></textarea>
