@@ -9,13 +9,14 @@ function getLocalStorage() {
     const localStorageItem = localStorage.getItem("nchan_keys_v1");
     const parsed = JSON.parse(localStorageItem ?? "");
     seckey.set(parsed.seckey);
-    anonymous.set(parsed.seckey);
-    expire.set(parsed.seckey);
+    anonymous.set(parsed.anonymous);
+    expire.set(parsed.expire);
   } catch (e) {
-    console.error("loading initian keys.");
+    console.log("loading initian keys.");
     seckey.set(null);
     anonymous.set(null);
     expire.set(null);
+    setLocalStorage();
   }
 }
 
@@ -29,10 +30,13 @@ function setLocalStorage() {
   localStorage.setItem("nchan_keys_v1", keysString);
 }
 
-export function initializeStores() {
-  localStorage.removeItem("nchan_private_key");
-  localStorage.removeItem("nchan_private_key_expire");
-  getLocalStorage();
+function initializeStores() {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("nchan_private_key");
+    localStorage.removeItem("nchan_private_key_expire");
+    console.log("initialize");
+    getLocalStorage();
+  }
 }
 
 // seckeyとexpireをローカルストレージに保存する関数
@@ -75,3 +79,5 @@ export function getAnonymousKey(): string | null {
 export function getSecKey(): string | null {
   return get(seckey);
 }
+
+initializeStores();

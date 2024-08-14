@@ -1,13 +1,4 @@
 import { format, fromUnixTime } from "date-fns";
-import { initializeStores } from "./store";
-
-const initKey = () => {
-  if (typeof window !== "undefined") {
-    initializeStores();
-  }
-};
-
-initKey();
 
 export const parseCreated = (time: number) =>
   format(fromUnixTime(time), "yyyy/MM/dd HH:mm:ss");
