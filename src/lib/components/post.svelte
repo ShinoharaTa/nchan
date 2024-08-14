@@ -1,7 +1,8 @@
 <script lang="ts">
   import { parseContent, parseCreated } from "$lib/app";
   import type { Nostr } from "nosvelte";
-  import Author from "./author.svelte";
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
 
   export let event: Nostr.Event<Nostr.Kind.Text>;
   const parsed = parseContent(event.content);
@@ -9,7 +10,10 @@
     (tag) => tag.includes("e") && tag.includes("reply"),
   );
   const reply = reply_tag ? reply_tag[1].slice(0, 10) : null;
-  // addReply(id: string)
+  function onClickReply(id: string) {
+    dispatch("reply", { id });
+    return null;
+  }
 </script>
 
 <article>
@@ -43,6 +47,11 @@
       <a href={url}>{url}</a>
     </blockquote>
   {/each}
+  <div class="reply">
+    <button class="small" on:click={onClickReply(event.id)}>
+      <img src="/reply.svg" alt="" class="path" height="16px" /> リプライ</button
+    >
+  </div>
 </article>
 
 <style>
@@ -52,5 +61,8 @@
   }
   article {
     padding: 16px 0;
+  }
+  .reply {
+    margin-top: 8px;
   }
 </style>

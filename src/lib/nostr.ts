@@ -48,7 +48,12 @@ const checkSeckey = (seckey: string | null) => {
   return null;
 };
 
-export const post = async (content: string, thread: string, seckey: string) => {
+export const post = async (
+  content: string,
+  thread: string,
+  seckey: string,
+  reply: string | null
+) => {
   const event: EventTemplate<Kind.ChannelMessage> = {
     kind: Kind.ChannelMessage,
     content,
@@ -56,6 +61,9 @@ export const post = async (content: string, thread: string, seckey: string) => {
     created_at: Math.floor(new Date().getTime() / 1000),
   };
   event.tags.push(["e", thread, "", "root"]);
+  if(reply) {
+    event.tags.push(["e", reply, "", "reply"]);
+  }
   event.tags.push(["via", "nchan.shino3.net"]);
   const post = finishEvent(event, seckey);
   new Promise(() => {
