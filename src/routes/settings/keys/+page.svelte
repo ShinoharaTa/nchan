@@ -15,7 +15,6 @@
   if (typeof window !== "undefined") {
     const anonymous = getAnonymousKey();
     const identified = getSecKey();
-    // expireString = get
     anonymousNsec = anonymous ? nip19.nsecEncode(anonymous) : "";
     identifiedNsec = identified ? nip19.nsecEncode(identified) : "";
   }
@@ -25,7 +24,6 @@
       const { key, expire } = generateKey();
       saveToAnonymousKey(key, expire);
       anonymousNsec = nip19.nsecEncode(key);
-      // expireString = expire;
     }
   };
 
@@ -46,7 +44,7 @@
   const onClickRemovePrivateKey = () => {
     if (window.confirm("登録済みの秘密鍵を削除してもよろしいですか？")) {
       removeIdentifiedKey();
-      anonymousNsec = "";
+      identifiedNsec = "";
     }
   };
 </script>

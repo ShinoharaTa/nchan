@@ -2,8 +2,8 @@
   import { page } from "$app/stores";
   import NavigationBar from "$lib/components/navbar.svelte";
   import Post from "$lib/components/post.svelte";
-  import { post, relays, req } from "$lib/nostr";
-  import { getAnonymousKey, getSecKey } from "$lib/store";
+  import { generateKey, post, relays, req } from "$lib/nostr";
+  import { getAnonymousKey, getSecKey, saveToAnonymousKey } from "$lib/store";
   import type { Nostr } from "nosvelte";
   import { Event, NostrApp, UniqueEventList } from "nosvelte";
   import { writable } from "svelte/store";
@@ -23,10 +23,21 @@
   let anonymous = true;
 
   const submit = async () => {
-    const seckey = anonymous ? getAnonymousKey() : getSecKey();
+    let seckey = anonymous ? getAnonymousKey() : getSecKey();
     if (!seckey) {
-      alert("投稿するには鍵の生成または登録が必要です");
-      return;
+      if (anonymous) {
+        if (window.confirm("匿名秘密鍵を新規生成しますか？")) {
+          const { key, expire } = generateKey();
+          saveToAnonymousKey(key, expire);
+          seckey = key;
+        } else {
+          alert("投稿を中止します");
+          return;
+        }
+      } else {
+        alert("投稿するには鍵の生成または登録が必要です");
+        return;
+      }
     }
     const result = await post(postContent, channel_id, seckey, replyId);
     if (result) {
