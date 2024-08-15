@@ -1,5 +1,11 @@
 import { createRxForwardReq } from "rx-nostr";
-import { generatePrivateKey, finishEvent, Kind, SimplePool } from "nostr-tools";
+import {
+  generatePrivateKey,
+  finishEvent,
+  Kind,
+  SimplePool,
+  getPublicKey,
+} from "nostr-tools";
 import type { EventTemplate, Event } from "nostr-tools";
 import { addDays, startOfDay, format } from "date-fns";
 const pool = new SimplePool();
@@ -37,7 +43,7 @@ export const post = async (
     created_at: Math.floor(new Date().getTime() / 1000),
   };
   event.tags.push(["e", thread, "", "root"]);
-  if(reply) {
+  if (reply) {
     event.tags.push(["e", reply, "", "reply"]);
   }
   event.tags.push(["via", "nchan.shino3.net"]);
@@ -76,6 +82,35 @@ export const newThread = async (
     });
   });
   return post.id;
+};
+
+export const newAuthor = async (seckey: string) => {
+  const hex = getPublicKey(seckey);
+  const content = {
+    display_name: `んちゃんねるの名無しさん${hex.slice(0, 6)}`,
+    name: `nchan_${hex.slice(0, 6)}`,
+    about:
+      "んちゃんねる (https://nchan.shino3.net) にて作られた匿名アカウントです",
+    nip05: "",
+    website: "",
+    lud16: "shino3@getalby.com",
+    picture: "https://nchan.shino3.net/channel_img.png",
+  };
+  const event: EventTemplate<Kind.Metadata> = {
+    kind: Kind.Metadata,
+    content: JSON.stringify(content),
+    tags: [],
+    created_at: Math.floor(new Date().getTime() / 1000),
+  };
+  event.tags.push(["via", "nchan.shino3.net"]);
+  const post = finishEvent(event, seckey);
+  new Promise(() => {
+    const pub = pool.publish(relays, post);
+    pub.on("failed", (ev: Event) => {
+      console.error("failed to send event", ev);
+    });
+  });
+  return;
 };
 
 const fetcher = NostrFetcher.withCustomPool(simplePoolAdapter(pool));

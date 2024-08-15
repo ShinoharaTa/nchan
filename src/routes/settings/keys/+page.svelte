@@ -1,6 +1,6 @@
 <script lang="ts">
   import NavigationBar from "$lib/components/navbar.svelte";
-  import { generateKey } from "$lib/nostr";
+  import { generateKey, newAuthor } from "$lib/nostr";
   import {
     getAnonymousKey,
     getSecKey,
@@ -23,6 +23,7 @@
     if (window.confirm("現在のキーを破棄して新規キーを生成しますか？")) {
       const { key, expire } = generateKey();
       saveToAnonymousKey(key, expire);
+      newAuthor(key);
       anonymousNsec = nip19.nsecEncode(key);
     }
   };
