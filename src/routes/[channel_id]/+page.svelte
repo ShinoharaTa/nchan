@@ -2,7 +2,7 @@
   import { page } from "$app/stores";
   import NavigationBar from "$lib/components/navbar.svelte";
   import Post from "$lib/components/post.svelte";
-  import { generateKey, post, relays, req } from "$lib/nostr";
+  import { generateKey, newAuthor, post, relays, req } from "$lib/nostr";
   import { getAnonymousKey, getSecKey, saveToAnonymousKey } from "$lib/store";
   import type { Nostr } from "nosvelte";
   import { Event, NostrApp, UniqueEventList } from "nosvelte";
@@ -29,6 +29,7 @@
         if (window.confirm("匿名秘密鍵を新規生成しますか？")) {
           const { key, expire } = generateKey();
           saveToAnonymousKey(key, expire);
+          newAuthor(key);
           seckey = key;
         } else {
           alert("投稿を中止します");
