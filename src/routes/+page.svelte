@@ -49,7 +49,7 @@
       {#each thread.events.reverse() as event}
         <article>
             <p class="ellipsis">
-              <span style="background: #{event.pubkey.slice(0, 6)}">
+              <span style="background: #{event.pubkey.slice(0, 6)}66">
                 {event.pubkey.slice(0, 6)}
               </span>
               {event.content}</p>

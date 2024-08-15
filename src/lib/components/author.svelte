@@ -8,7 +8,7 @@
 {:else if style === "none"}
   <span>{hex.slice(0, 6)}</span>
 {:else}
-  <span style="background-color: #{hex.slice(0, 6)}88;"
+  <span style="background-color: #{hex.slice(0, 6)}66;"
     >{hex.slice(0, 6)}</span
   >
 {/if}
