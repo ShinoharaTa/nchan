@@ -18,7 +18,7 @@
 
 <article>
   <div class="flex">
-    <h3 style="color: #{event.pubkey.slice(0, 6)};">
+    <h3 style="border-left: 4px solid #{event.pubkey.slice(0, 6)}; text-indent: 0.5rem;">
       んちゃんねるから{event.pubkey.slice(0, 6)}がお送りします
     </h3>
     <time data-time={parseCreated(event.created_at)}
@@ -55,6 +55,9 @@
 </article>
 
 <style>
+  h3 {
+    color: #0B8E14;
+  }
   .flex {
     gap: 4px 8px;
     margin-bottom: 8px;
