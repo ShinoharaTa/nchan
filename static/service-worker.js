@@ -1,7 +1,7 @@
-const CACHE_NAME = 'my-cache-v1.1.2';
+const CACHE_NAME = 'my-cache-v1.1.3';
 const urlsToCache = [
   // '/',
-  '/manifest.json',
+  //'/manifest.json',
   // '/icons/icon-192x192.png',
   // '/icons/icon-512x512.png',
 ];
