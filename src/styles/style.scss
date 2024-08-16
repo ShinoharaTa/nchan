@@ -2,6 +2,7 @@
   --background: #eee;
   --text: #000;
   --pathColor: invert(0%);
+  --border: 1px solid #888;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -9,6 +10,7 @@
     --background: #222;
     --text: #fff;
     --pathColor: invert(100%);
+    --border: 1px solid #888;
   }
 
   a {
@@ -109,20 +111,19 @@ button {
   background-color: #ddd;
   outline: 0;
   font-size: 1rem;
-  padding: 6px 18px;
-  display: inline-flex;
+  padding: 8px 16px;
+  display: flex;
   align-items: center;
+  cursor: pointer;
+  border-radius: 4px;
+  gap: 4px;
+
   &.small {
-    border: 1px solid #888;
-    background-color: initial;
+    border: var(--border);
+    background: none;
     font-size: 0.8rem;
     padding: 4px 8px;
-    @media (prefers-color-scheme: dark) {
-      color: #fff;
-    }
-  }
-  >img{
-    padding: 0 5px 0 0;
+    color: var(--text);
   }
 }
 
