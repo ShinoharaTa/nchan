@@ -1,4 +1,5 @@
 {
+  "theme_color": "#eeeeee",
   "background_color": "#eeeeee",
   "icons": [
     {
@@ -8,9 +9,10 @@
     }
   ],
   "display": "standalone",
-  "dir": "auto",
   "lang": "ja",
   "name": "んちゃんねる",
-  "short_name": "んch",
-  "start_url": "https://nchan.shino3.net/"
+  "short_name": "んちゃんねる",
+  "description": "Nostr プロトコルを使用したパブリックチャット専用クライアントです",
+  "start_url": "/",
+  "scope": "/"
 }
