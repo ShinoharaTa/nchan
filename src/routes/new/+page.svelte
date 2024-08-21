@@ -9,6 +9,7 @@
   let name = "";
   let postContent = "";
   let anonymous = true;
+  $: submitDisabled = !name.trim() || !postContent.trim();
 
   const submit = async () => {
     const seckey = anonymous ? getAnonymousKey() : getSecKey();
@@ -57,7 +58,7 @@
     />
     <label for="anonymous_new_thread">匿名でスレ立て</label>
   </div>
-  <button on:click={submit}>新規スレッド作成</button>
+  <button on:click={submit} disabled={submitDisabled}>新規スレッド作成</button>
   <small>
     *
     新規スレが一覧に反映されるまで、仕組みの都合上、最大5分ほど待つ場合があります。<br

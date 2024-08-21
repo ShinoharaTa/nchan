@@ -21,6 +21,7 @@
   let postContent = "";
   let replyId: string | null = null;
   let anonymous = true;
+  $: submitDisabled = !postContent.trim();
 
   const submit = async () => {
     let seckey = anonymous ? getAnonymousKey() : getSecKey();
@@ -117,7 +118,7 @@
           />
           <label for="anonymous_new_thread">匿名で書き込む</label>
         </div>
-        <button on:click={submit} type="button">書き込む</button>
+        <button on:click={submit} type="button" disabled={submitDisabled}>書き込む</button>
       </form>
     </main>
   </UniqueEventList>
