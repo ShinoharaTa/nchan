@@ -46,7 +46,7 @@ export const post = async (
   if (reply) {
     event.tags.push(["e", reply, "", "reply"]);
   }
-  event.tags.push(["via", "nchan.shino3.net"]);
+  event.tags.push(["client", "nchan.shino3.net"]);
   const post = finishEvent(event, seckey);
   new Promise(() => {
     const pub = pool.publish(relays, post);
@@ -73,7 +73,7 @@ export const newThread = async (
     tags: [],
     created_at: Math.floor(new Date().getTime() / 1000),
   };
-  event.tags.push(["via", "nchan.shino3.net"]);
+  event.tags.push(["client", "nchan.shino3.net"]);
   const post = finishEvent(event, seckey);
   new Promise(() => {
     const pub = pool.publish(relays, post);
@@ -102,7 +102,7 @@ export const newAuthor = async (seckey: string) => {
     tags: [],
     created_at: Math.floor(new Date().getTime() / 1000),
   };
-  event.tags.push(["via", "nchan.shino3.net"]);
+  event.tags.push(["client", "nchan.shino3.net"]);
   const post = finishEvent(event, seckey);
   new Promise(() => {
     const pub = pool.publish(relays, post);
