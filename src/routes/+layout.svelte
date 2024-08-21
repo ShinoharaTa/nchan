@@ -21,7 +21,12 @@
 <div class="h-min-100vh">
   <slot />
   <footer>
-    Copyright 2024 - T.Shinohara
+    <p>
+      <a href="about">About</a>
+      <a href="https://github.com/ShinoharaTa/nchan" target="_blank">GitHub</a
+      >
+    </p>
+    <p>Copyright 2024 - T.Shinohara</p>
   </footer>
 </div>
 
@@ -34,6 +39,6 @@
   footer {
     margin-top: auto;
     text-align: center;
-    font-size: .8rem;
+    font-size: 0.8rem;
   }
 </style>

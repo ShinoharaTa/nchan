@@ -44,7 +44,13 @@ header {
 }
 
 footer {
-  padding: 20px;
+  padding: 14px;
+  >p{
+    padding: 6px 0;
+    >a{
+      padding: 0 12px;
+    }
+  }
 }
 
 p {
