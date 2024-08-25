@@ -162,3 +162,45 @@ button {
 .path {
   filter: var(--pathColor);
 }
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1001;
+  max-height: 80vh;
+  max-width: 600px;
+  width: calc(100vw - 20px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  @media (prefers-color-scheme: dark) {
+    background: var(--background);
+    border: var(--border)
+  }
+}
+
+.header,
+.footer {
+  flex-shrink: 0;
+}
+
+.content {
+  overflow-y: auto;
+  flex-grow: 1;
+  padding: 10px 0;
+}

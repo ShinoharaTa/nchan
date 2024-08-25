@@ -9,7 +9,7 @@ import {
 import type { EventTemplate, Event } from "nostr-tools";
 import { addDays, startOfDay, format } from "date-fns";
 const pool = new SimplePool();
-import { NostrFetcher } from "nostr-fetch";
+import { eventKind, NostrFetcher } from "nostr-fetch";
 import type { NostrEvent, FetchFilter } from "nostr-fetch";
 import { simplePoolAdapter } from "@nostr-fetch/adapter-nostr-tools";
 
@@ -123,6 +123,13 @@ export const getSingleItem = async (params: { kind: number; id: string }) => {
   return lastData;
 };
 
+export const getSingleEvent = async (id: string) => {
+  return await pool.get(relays, {
+    kinds: [42],
+    ids: [id],
+  })
+};
+
 type SingleThread = {
   id: string;
   author: string;
@@ -141,4 +148,26 @@ export const getThreadList = async (): Promise<SingleThread[]> => {
     "#d": ["nchan_list"],
   });
   return result ? JSON.parse(result.content) : [];
+};
+
+export const getChannelMeta = async (id: string): Promise<string> => {
+  const event = await pool.get(relays, {
+      kinds: [40],
+      ids: [id],
+    })
+    if(!event) return "";
+    const metadata = await pool.list(relays, [
+
+    {
+      kinds: [41],
+      "#e": [id],
+      authors: [event.pubkey],
+      limit: 1
+    },
+  ]
+  )
+    const latestMeta = metadata.length > 0 ? metadata.sort((a, b) => a.created_at - b.created_at)[0]: null;
+  const parsedMeta = JSON.parse(latestMeta ? latestMeta.content : event.content
+  )
+  return parsedMeta.name
 };

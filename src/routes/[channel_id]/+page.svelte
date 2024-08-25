@@ -1,11 +1,27 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import Modal from "$lib/components/modal.svelte";
   import NavigationBar from "$lib/components/navbar.svelte";
   import Post from "$lib/components/post.svelte";
-  import { generateKey, newAuthor, post, relays, req } from "$lib/nostr";
-  import { getAnonymousKey, getSecKey, saveToAnonymousKey } from "$lib/store";
+  import {
+    generateKey,
+    getChannelMeta,
+    getSingleEvent,
+    newAuthor,
+    post,
+    relays,
+    req,
+  } from "$lib/nostr";
+  import {
+    getAnonymousKey,
+    getSecKey,
+    modal,
+    saveToAnonymousKey,
+  } from "$lib/store";
+  import type { Event, Kind } from "nostr-tools";
   import type { Nostr } from "nosvelte";
-  import { Event, NostrApp, UniqueEventList } from "nosvelte";
+  import { NostrApp, UniqueEventList } from "nosvelte";
+  import { onMount, tick } from "svelte";
   import { writable } from "svelte/store";
   import "websocket-polyfill";
   const channel_id: string = $page.params.channel_id;
@@ -17,9 +33,16 @@
 
   const limitLists = [20, 50, 100];
   const selectedLimit = writable(20);
+  let channelNameLoaded = false;
+  let channelName = "";
+  const initLoading = async () => {
+    channelName = await getChannelMeta(channel_id);
+    channelNameLoaded = true;
+  };
 
   let postContent = "";
   let replyId: string | null = null;
+  let parentEvent: Event<Kind.Text>;
   let anonymous = true;
   $: submitDisabled = !postContent.trim();
 
@@ -53,6 +76,15 @@
       submit();
     }
   };
+
+  const openReply = async (id: string) => {
+    const event = await getSingleEvent(id);
+    if (!event) return;
+    parentEvent = event;
+    modal.set(true);
+  };
+
+  initLoading();
 </script>
 
 <NavigationBar>
@@ -67,6 +99,17 @@
     </a>
   </div>
 </NavigationBar>
+
+<Modal>
+  <div class="flex flex-between" slot="header">
+    <h2></h2>
+    <button on:click={() => modal.set(false)}>Close</button>
+  </div>
+  <div slot="content">
+    <Post event={parentEvent} action={false}></Post>
+  </div>
+  <div slot="footer"></div>
+</Modal>
 
 <NostrApp {relays}>
   <UniqueEventList
@@ -88,14 +131,18 @@
       <p class="center">{error}</p>
     </div>
     <main>
-      <Event queryKey={[]} id={channel_id} let:event>
+      {#if channelNameLoaded}
         <h2 class="mb-2 ellipsis">
-          {JSON.parse(event.content).name ?? "タイトルなし"}
+          {channelName ?? "タイトルなし"}
         </h2>
-      </Event>
+      {/if}
       <section>
         {#each sorted(events) as event (event.id)}
-          <Post {event} on:reply={(e) => (replyId = e.detail.id)} />
+          <Post
+            {event}
+            on:reply={(e) => (replyId = e.detail.id)}
+            on:openReply={(e) => openReply(e.detail.id)}
+          />
         {/each}
       </section>
       <form>
@@ -118,7 +165,9 @@
           />
           <label for="anonymous_new_thread">匿名で書き込む</label>
         </div>
-        <button on:click={submit} type="button" disabled={submitDisabled}>書き込む</button>
+        <button on:click={submit} type="button" disabled={submitDisabled}
+          >書き込む</button
+        >
       </form>
     </main>
   </UniqueEventList>
