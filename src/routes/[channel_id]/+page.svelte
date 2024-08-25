@@ -2,10 +2,18 @@
   import { page } from "$app/stores";
   import NavigationBar from "$lib/components/navbar.svelte";
   import Post from "$lib/components/post.svelte";
-  import { generateKey, newAuthor, post, relays, req } from "$lib/nostr";
+  import {
+    generateKey,
+    getChannelMeta,
+    newAuthor,
+    post,
+    relays,
+    req,
+  } from "$lib/nostr";
   import { getAnonymousKey, getSecKey, saveToAnonymousKey } from "$lib/store";
   import type { Nostr } from "nosvelte";
-  import { Event, NostrApp, UniqueEventList } from "nosvelte";
+  import { NostrApp, UniqueEventList } from "nosvelte";
+  import { onMount, tick } from "svelte";
   import { writable } from "svelte/store";
   import "websocket-polyfill";
   const channel_id: string = $page.params.channel_id;
@@ -17,6 +25,12 @@
 
   const limitLists = [20, 50, 100];
   const selectedLimit = writable(20);
+  let channelNameLoaded = false;
+  let channelName = "";
+  const initLoading = async () => {
+    channelName = await getChannelMeta(channel_id);
+    channelNameLoaded = true;
+  };
 
   let postContent = "";
   let replyId: string | null = null;
@@ -53,6 +67,8 @@
       submit();
     }
   };
+
+  initLoading();
 </script>
 
 <NavigationBar>
@@ -88,11 +104,11 @@
       <p class="center">{error}</p>
     </div>
     <main>
-      <Event queryKey={[]} id={channel_id} let:event>
+      {#if channelNameLoaded}
         <h2 class="mb-2 ellipsis">
-          {JSON.parse(event.content).name ?? "タイトルなし"}
+          {channelName ?? "タイトルなし"}
         </h2>
-      </Event>
+      {/if}
       <section>
         {#each sorted(events) as event (event.id)}
           <Post {event} on:reply={(e) => (replyId = e.detail.id)} />
@@ -118,7 +134,9 @@
           />
           <label for="anonymous_new_thread">匿名で書き込む</label>
         </div>
-        <button on:click={submit} type="button" disabled={submitDisabled}>書き込む</button>
+        <button on:click={submit} type="button" disabled={submitDisabled}
+          >書き込む</button
+        >
       </form>
     </main>
   </UniqueEventList>
