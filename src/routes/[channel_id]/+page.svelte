@@ -1,16 +1,24 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import Modal from "$lib/components/modal.svelte";
   import NavigationBar from "$lib/components/navbar.svelte";
   import Post from "$lib/components/post.svelte";
   import {
     generateKey,
     getChannelMeta,
+    getSingleEvent,
     newAuthor,
     post,
     relays,
     req,
   } from "$lib/nostr";
-  import { getAnonymousKey, getSecKey, saveToAnonymousKey } from "$lib/store";
+  import {
+    getAnonymousKey,
+    getSecKey,
+    modal,
+    saveToAnonymousKey,
+  } from "$lib/store";
+  import type { Event, Kind } from "nostr-tools";
   import type { Nostr } from "nosvelte";
   import { NostrApp, UniqueEventList } from "nosvelte";
   import { onMount, tick } from "svelte";
@@ -34,6 +42,7 @@
 
   let postContent = "";
   let replyId: string | null = null;
+  let parentEvent: Event<Kind.Text>;
   let anonymous = true;
   $: submitDisabled = !postContent.trim();
 
@@ -68,6 +77,13 @@
     }
   };
 
+  const openReply = async (id: string) => {
+    const event = await getSingleEvent(id);
+    if (!event) return;
+    parentEvent = event;
+    modal.set(true);
+  };
+
   initLoading();
 </script>
 
@@ -83,6 +99,17 @@
     </a>
   </div>
 </NavigationBar>
+
+<Modal>
+  <div class="flex flex-between" slot="header">
+    <h2></h2>
+    <button on:click={() => modal.set(false)}>Close</button>
+  </div>
+  <div slot="content">
+    <Post event={parentEvent} action={false}></Post>
+  </div>
+  <div slot="footer"></div>
+</Modal>
 
 <NostrApp {relays}>
   <UniqueEventList
@@ -111,7 +138,11 @@
       {/if}
       <section>
         {#each sorted(events) as event (event.id)}
-          <Post {event} on:reply={(e) => (replyId = e.detail.id)} />
+          <Post
+            {event}
+            on:reply={(e) => (replyId = e.detail.id)}
+            on:openReply={(e) => openReply(e.detail.id)}
+          />
         {/each}
       </section>
       <form>

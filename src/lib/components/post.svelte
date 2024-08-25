@@ -5,20 +5,29 @@
   const dispatch = createEventDispatcher();
 
   export let event: Nostr.Event<Nostr.Kind.Text>;
+  export let action = true;
   const parsed = parseContent(event.content);
   const reply_tag = event.tags.find(
     (tag) => tag.includes("e") && tag.includes("reply"),
   );
-  const reply = reply_tag ? reply_tag[1].slice(0, 10) : null;
+  const reply = reply_tag ? reply_tag[1] : null;
   function onClickReply(id: string) {
     dispatch("reply", { id });
     return null;
+  }
+  function onClickParentId() {
+    dispatch("openReply", { id: reply });
   }
 </script>
 
 <article>
   <div class="flex">
-    <h3 style="border-left: 4px solid #{event.pubkey.slice(0, 6)}; text-indent: 0.5rem;">
+    <h3
+      style="border-left: 4px solid #{event.pubkey.slice(
+        0,
+        6,
+      )}; text-indent: 0.5rem;"
+    >
       んちゃんねるから{event.pubkey.slice(0, 6)}がお送りします
     </h3>
     <time data-time={parseCreated(event.created_at)}
@@ -26,8 +35,13 @@
     >
     <aside>ID:{event.id.slice(0, 10)}</aside>
   </div>
-  {#if reply}
-    <a href="javascript: void(0);">{`>>${reply}`}</a>
+  {#if reply && action}
+    <a href="javascript: void(0);" on:click={onClickParentId}
+      >{`>>${reply.slice(0, 10)}`}</a
+    >
+  {/if}
+  {#if reply && !action}
+    {`>>${reply.slice(0, 10)}`}
   {/if}
   <p>{parsed.text_without_urls}</p>
   {#each parsed.other_urls as url}
@@ -47,16 +61,18 @@
       <a href={url}>{url}</a>
     </blockquote>
   {/each}
-  <div class="reply">
-    <button class="small" on:click={onClickReply(event.id)}>
-      <img src="/reply.svg" alt="" class="path" height="16px" /> リプライ</button
-    >
-  </div>
+  {#if action}
+    <div class="reply">
+      <button class="small" on:click={onClickReply(event.id)}>
+        <img src="/reply.svg" alt="" class="path" height="16px" /> リプライ</button
+      >
+    </div>
+  {/if}
 </article>
 
 <style>
   h3 {
-    color: #0B8E14;
+    color: #0b8e14;
   }
   .flex {
     gap: 4px 8px;

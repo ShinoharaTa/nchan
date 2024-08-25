@@ -123,6 +123,13 @@ export const getSingleItem = async (params: { kind: number; id: string }) => {
   return lastData;
 };
 
+export const getSingleEvent = async (id: string) => {
+  return await pool.get(relays, {
+    kinds: [42],
+    ids: [id],
+  })
+};
+
 type SingleThread = {
   id: string;
   author: string;
