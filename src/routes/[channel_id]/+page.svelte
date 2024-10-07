@@ -153,7 +153,7 @@
           >
         {/if}
         <label>
-          <textarea bind:value={postContent} on:keydown={submitKeydown}
+          <textarea bind:value={postContent} on:keydown={submitKeydown} placeholder="最近どう？"
           ></textarea>
         </label>
         <div class="flex">
