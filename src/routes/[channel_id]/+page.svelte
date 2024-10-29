@@ -15,7 +15,6 @@
   import {
     getAnonymousKey,
     getSecKey,
-    modal,
     saveToAnonymousKey,
   } from "$lib/store";
   import type { Event, Kind } from "nostr-tools";
@@ -42,7 +41,8 @@
 
   let postContent = "";
   let replyId: string | null = null;
-  let parentEvent: Event<Kind.Text>;
+  let parentEvent: Event<Kind.ChannelMessage>;
+  let openReplyModal = false;
   let anonymous = true;
   $: submitDisabled = !postContent.trim();
 
@@ -81,7 +81,7 @@
     const event = await getSingleEvent(id);
     if (!event) return;
     parentEvent = event;
-    modal.set(true);
+    openReplyModal = true;
   };
 
   initLoading();
@@ -100,10 +100,10 @@
   </div>
 </NavigationBar>
 
-<Modal>
+<Modal isOpen={openReplyModal}>
   <div class="flex flex-between" slot="header">
     <h2></h2>
-    <button on:click={() => modal.set(false)}>Close</button>
+    <button on:click={() => openReplyModal = false}>Close</button>
   </div>
   <div slot="content">
     <Post event={parentEvent} action={false}></Post>
