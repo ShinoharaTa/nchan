@@ -4,7 +4,7 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
-  export let event: Nostr.Event<Nostr.Kind.Text>;
+  export let event: Nostr.Event<Nostr.Kind.ChannelMessage>;
   export let action = true;
   const parsed = parseContent(event.content);
   const reply_tag = event.tags.find(

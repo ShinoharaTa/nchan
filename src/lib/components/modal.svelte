@@ -1,23 +1,10 @@
-<script>
-  import { modal } from "$lib/store";
-  import { onDestroy, onMount } from "svelte";
-
-  let isOpen = false;
+<script lang="ts">
+  import { onMount } from "svelte";
+  export let isOpen: boolean;
 
   const handleClose = () => {
     isOpen = false;
-    modal.set(false); // モーダルを閉じるときにstoreをクリア
   };
-
-  $: {
-    const unsubscribe = modal.subscribe((value) => {
-      isOpen = !!value;
-    });
-
-    onDestroy(() => {
-      unsubscribe();
-    });
-  }
 
   // モーダルが開かれているときにスクロールを禁止
   onMount(() => {
