@@ -81,5 +81,3 @@ export function getSecKey(): string | null {
 }
 
 initializeStores();
-
-export const modal = writable<boolean>(false);
