@@ -1,5 +1,5 @@
 :root {
-  --background: #eee;
+  --background: #FFEFEE; /* 2chっぽい色 */
   --text: #000;
   --pathColor: invert(0%);
   --border: 1px solid #888;
@@ -7,14 +7,15 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    /* ダークモードも一応それっぽく */
     --background: #222;
-    --text: #fff;
+    --text: #ccc;
     --pathColor: invert(100%);
     --border: 1px solid #888;
   }
 
   a {
-    color: cornflowerblue;
+    color: #87CEFA; /* LightSkyBlue */
   }
 }
 
@@ -28,12 +29,21 @@ body {
   max-width: 1080px;
   margin: 0 auto;
   padding: 0 20px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  /* ２ちゃんねる風フォント */
+  font-family: 'MS PGothic', 'IPAMonaPGothic', 'Mona', sans-serif;
   background: var(--background);
   line-height: 1;
   color: var(--text);
 }
+
+/* クラシックなリンク色 */
+a {
+  color: #0000EE;
+}
+a:visited {
+  color: #551A8B;
+}
+
 
 header {
   position: sticky;
@@ -92,7 +102,7 @@ input {
   font-size: 1rem;
   padding: 8px;
   outline: none;
-  border: 0;
+  border: 1px solid #888; /* 枠線を追加 */
   &[type="checkbox"] {
     width: initial;
     display: block;
@@ -109,11 +119,11 @@ textarea {
   padding: 8px;
   height: 6rem;
   outline: none;
-  border: 0;
+  border: 1px solid #888; /* 枠線を追加 */
 }
 
 button {
-  border: none;
+  border: 1px solid #888; /* 枠線を調整 */
   background-color: #ddd;
   outline: 0;
   font-size: 1rem;
@@ -121,7 +131,7 @@ button {
   display: flex;
   align-items: center;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 0; /* 角をなくす */
   gap: 4px;
 
   &.small {
@@ -180,7 +190,7 @@ button {
   transform: translate(-50%, -50%);
   background: white;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 0; /* 角をなくす */
   z-index: 1001;
   max-height: 80vh;
   max-width: 600px;
@@ -188,6 +198,7 @@ button {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  border: 1px solid #888; /* 枠線を追加 */
   @media (prefers-color-scheme: dark) {
     background: var(--background);
     border: var(--border)
