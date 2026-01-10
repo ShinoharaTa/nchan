@@ -38,9 +38,17 @@
     <button on:click={newThread}>スレ立て</button>
     <button on:click={reload}>一覧リロード</button>
   </div>
+
+  <div class="thread-index">
+    <p>[スレッド一覧]</p>
+    {#each threads as thread, i}
+      <span>{i + 1}: </span><a href="#{thread.id}">{thread.name !== "" ? thread.name : "スレタイなし"}</a>&nbsp;
+    {/each}
+  </div>
+
   {#each threads as thread}
     <!-- {JSON.stringify(thread)} -->
-    <section>
+    <section id={thread.id}>
       <h2>
         <a href="/{thread.id}">
           {thread.name !== "" ? thread.name : "スレタイなし"}
@@ -66,7 +74,9 @@
 
 <style>
   section {
-    padding: 16px 0;
+    border: 1px solid #888;
+    padding: 8px;
+    margin-bottom: 12px;
   }
   article {
     padding: 2px 0;
@@ -77,5 +87,16 @@
   }
   h2 {
     margin-bottom: 12px;
+  }
+  .thread-index {
+    border: 1px solid #888;
+    padding: 8px;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .thread-index p {
+    font-weight: bold;
+    margin-bottom: 4px;
   }
 </style>
