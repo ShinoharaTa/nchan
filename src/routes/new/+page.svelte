@@ -4,7 +4,7 @@
   import { newThread, post } from "$lib/nostr";
   import { getAnonymousKey, getSecKey } from "$lib/store";
   import "websocket-polyfill";
-  const channel_id: string = $page.params.channel_id;
+  const channel_id = $page.params.channel_id ?? "";
 
   let name = "";
   let postContent = "";

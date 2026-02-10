@@ -7,7 +7,7 @@
   import { onMount } from "svelte";
   import "websocket-polyfill";
 
-  let threads = [];
+  let threads: Awaited<ReturnType<typeof getThreadList>> = [];
   let loading = true;
   onMount(async () => {
     threads = await getThreadList();

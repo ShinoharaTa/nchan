@@ -23,7 +23,7 @@
   import { onMount, tick } from "svelte";
   import { writable } from "svelte/store";
   import "websocket-polyfill";
-  const channel_id: string = $page.params.channel_id;
+  const channel_id = $page.params.channel_id ?? "";
 
   // 取得したイベントを時系列で並べ替える
   const sorted = (events: Nostr.Event[]) => {
@@ -41,7 +41,7 @@
 
   let postContent = "";
   let replyId: string | null = null;
-  let parentEvent: Event<Kind.ChannelMessage>;
+  let parentEvent: any;
   let openReplyModal = false;
   let anonymous = true;
   $: submitDisabled = !postContent.trim();

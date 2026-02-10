@@ -48,10 +48,12 @@ export const post = async (
   }
   event.tags.push(["client", "nchan.shino3.net"]);
   const post = finishEvent(event, seckey);
-  new Promise(() => {
-    const pub = pool.publish(relays, post);
-    pub.on("failed", (ev: Event) => {
-      console.error("failed to send event", ev);
+  const pubs = pool.publish(relays, post);
+  Promise.allSettled(pubs).then((results) => {
+    results.forEach((r) => {
+      if (r.status === "rejected") {
+        console.error("failed to send event", r.reason);
+      }
     });
   });
   return true;
@@ -75,10 +77,12 @@ export const newThread = async (
   };
   event.tags.push(["client", "nchan.shino3.net"]);
   const post = finishEvent(event, seckey);
-  new Promise(() => {
-    const pub = pool.publish(relays, post);
-    pub.on("failed", (ev: Event) => {
-      console.error("failed to send event", ev);
+  const pubs = pool.publish(relays, post);
+  Promise.allSettled(pubs).then((results) => {
+    results.forEach((r) => {
+      if (r.status === "rejected") {
+        console.error("failed to send event", r.reason);
+      }
     });
   });
   return post.id;
@@ -104,10 +108,12 @@ export const newAuthor = async (seckey: string) => {
   };
   event.tags.push(["client", "nchan.shino3.net"]);
   const post = finishEvent(event, seckey);
-  new Promise(() => {
-    const pub = pool.publish(relays, post);
-    pub.on("failed", (ev: Event) => {
-      console.error("failed to send event", ev);
+  const pubs = pool.publish(relays, post);
+  Promise.allSettled(pubs).then((results) => {
+    results.forEach((r) => {
+      if (r.status === "rejected") {
+        console.error("failed to send event", r.reason);
+      }
     });
   });
   return;
