@@ -14,9 +14,6 @@
     --border: 1px solid #888;
   }
 
-  a {
-    color: #87CEFA; /* LightSkyBlue */
-  }
 }
 
 * {
@@ -39,9 +36,15 @@ body {
 /* クラシックなリンク色 */
 a {
   color: #0000EE;
+  @media (prefers-color-scheme: dark) {
+    color: #87CEFA; /* LightSkyBlue */
+  }
 }
 a:visited {
   color: #551A8B;
+  @media (prefers-color-scheme: dark) {
+    color: #59D4A0; /* MintGreen */
+  }
 }
 
 
