@@ -5,15 +5,11 @@
   --border: 1px solid #888;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* ダークモードも一応それっぽく */
-    --background: #222;
-    --text: #ccc;
-    --pathColor: invert(100%);
-    --border: 1px solid #888;
-  }
-
+:root.dark {
+  --background: #222;
+  --text: #ccc;
+  --pathColor: invert(100%);
+  --border: 1px solid #888;
 }
 
 * {
@@ -36,13 +32,13 @@ body {
 /* クラシックなリンク色 */
 a {
   color: #0000EE;
-  @media (prefers-color-scheme: dark) {
+  :root.dark & {
     color: #87CEFA; /* LightSkyBlue */
   }
 }
 a:visited {
   color: #551A8B;
-  @media (prefers-color-scheme: dark) {
+  :root.dark & {
     color: #59D4A0; /* MintGreen */
   }
 }
@@ -125,6 +121,17 @@ textarea {
   border: 1px solid #888; /* 枠線を追加 */
 }
 
+select {
+  border: 1px solid #888;
+  background-color: #ddd;
+  outline: 0;
+  font-size: 1rem;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 0;
+  appearance: auto;
+}
+
 button {
   border: 1px solid #888; /* 枠線を調整 */
   background-color: #ddd;
@@ -202,7 +209,7 @@ button {
   flex-direction: column;
   overflow: hidden;
   border: 1px solid #888; /* 枠線を追加 */
-  @media (prefers-color-scheme: dark) {
+  :root.dark & {
     background: var(--background);
     border: var(--border)
   }
