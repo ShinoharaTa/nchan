@@ -3,21 +3,22 @@
   import { parseCreated } from "$lib/app";
   import Author from "$lib/components/author.svelte";
   import NavigationBar from "$lib/components/navbar.svelte";
-  import { getThreadList } from "$lib/nostr";
+  import ThemeToggle from "$lib/components/theme-toggle.svelte";
+  import { fetchThreadList, type SortOption } from "$lib/api";
   import { onMount } from "svelte";
-  import "websocket-polyfill";
 
-  let threads: Awaited<ReturnType<typeof getThreadList>> = [];
+  let threads: Awaited<ReturnType<typeof fetchThreadList>> = [];
   let loading = true;
-  onMount(async () => {
-    threads = await getThreadList();
-    loading = false;
-  });
+  let currentSort: SortOption = "latest";
 
-  const reload = async () => {
-    threads = await getThreadList();
+  const load = async (sort: SortOption = currentSort) => {
+    loading = true;
+    currentSort = sort;
+    threads = await fetchThreadList(sort);
     loading = false;
   };
+
+  onMount(() => load());
 
   const newThread = () => goto("/new");
 </script>
@@ -26,7 +27,8 @@
   <div slot="left">
     <img src="/blank.svg" alt="" height="24px" />
   </div>
-  <div slot="right">
+  <div slot="right" class="flex">
+    <ThemeToggle />
     <a href="/settings/keys"><img src="/gear.svg" class="path" alt="" height="24px" /></a>
   </div>
 </NavigationBar>
@@ -36,7 +38,13 @@
   {:else}
   <div class="flex">
     <button on:click={newThread}>スレ立て</button>
-    <button on:click={reload}>一覧リロード</button>
+    <button on:click={() => load()}>一覧リロード</button>
+    <select bind:value={currentSort} on:change={() => load()}>
+      <option value="latest">最新書込順</option>
+      <option value="oldest">古い書込順</option>
+      <option value="created_new">新スレ順</option>
+      <option value="created_old">古スレ順</option>
+    </select>
   </div>
 
   <div class="thread-index">

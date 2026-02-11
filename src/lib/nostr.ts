@@ -136,7 +136,7 @@ export const getSingleEvent = async (id: string) => {
   })
 };
 
-type SingleThread = {
+export type SingleThread = {
   id: string;
   author: string;
   latest_update: number;
@@ -146,14 +146,6 @@ type SingleThread = {
     pubkey: string;
     created_at: number;
   }[];
-};
-
-export const getThreadList = async (): Promise<SingleThread[]> => {
-  const result = await pool.get(relays, {
-    kinds: [30078],
-    "#d": ["nchan_list"],
-  });
-  return result ? JSON.parse(result.content) : [];
 };
 
 export const getChannelMeta = async (id: string): Promise<string> => {
