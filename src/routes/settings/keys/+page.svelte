@@ -1,5 +1,6 @@
 <script lang="ts">
   import NavigationBar from "$lib/components/navbar.svelte";
+  import ThemeToggle from "$lib/components/theme-toggle.svelte";
   import { generateKey, newAuthor } from "$lib/nostr";
   import {
     getAnonymousKey,
@@ -54,8 +55,8 @@
   <div slot="left">
     <a href="/"><img src="/left.svg" class="path" alt="" height="24px" /></a>
   </div>
-  <div slot="right">
-    <img src="/blank.svg" alt="" height="24px" />
+  <div slot="right" class="flex">
+    <ThemeToggle />
   </div>
 </NavigationBar>
 <div>

@@ -1,10 +1,12 @@
 <script>
   import { page } from "$app/stores";
   import Modal from "$lib/components/modal.svelte";
-  import { removeIdentifiedKey } from "$lib/store";
+  import { removeIdentifiedKey, initTheme } from "$lib/store";
   import { onMount } from "svelte";
   import "../styles/style.scss";
+
   onMount(() => {
+    initTheme();
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
         .register("/service-worker.js")
