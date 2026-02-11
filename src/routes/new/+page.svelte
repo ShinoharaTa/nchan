@@ -1,10 +1,11 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import NavigationBar from "$lib/components/navbar.svelte";
+  import ThemeToggle from "$lib/components/theme-toggle.svelte";
   import { newThread, post } from "$lib/nostr";
   import { getAnonymousKey, getSecKey } from "$lib/store";
   import "websocket-polyfill";
-  const channel_id: string = $page.params.channel_id;
+  const channel_id = $page.params.channel_id ?? "";
 
   let name = "";
   let postContent = "";
@@ -34,7 +35,8 @@
       <img src="/left.svg" class="path" alt="" height="24px" />
     </a>
   </div>
-  <div slot="right">
+  <div slot="right" class="flex">
+    <ThemeToggle />
     <a href="/settings/keys">
       <img src="/gear.svg" class="path" alt="" height="24px" />
     </a>

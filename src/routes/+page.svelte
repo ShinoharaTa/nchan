@@ -3,21 +3,22 @@
   import { parseCreated } from "$lib/app";
   import Author from "$lib/components/author.svelte";
   import NavigationBar from "$lib/components/navbar.svelte";
-  import { getThreadList } from "$lib/nostr";
+  import ThemeToggle from "$lib/components/theme-toggle.svelte";
+  import { fetchThreadList, type SortOption } from "$lib/api";
   import { onMount } from "svelte";
-  import "websocket-polyfill";
 
-  let threads = [];
+  let threads: Awaited<ReturnType<typeof fetchThreadList>> = [];
   let loading = true;
-  onMount(async () => {
-    threads = await getThreadList();
-    loading = false;
-  });
+  let currentSort: SortOption = "latest";
 
-  const reload = async () => {
-    threads = await getThreadList();
+  const load = async (sort: SortOption = currentSort) => {
+    loading = true;
+    currentSort = sort;
+    threads = await fetchThreadList(sort);
     loading = false;
   };
+
+  onMount(() => load());
 
   const newThread = () => goto("/new");
 </script>
@@ -26,7 +27,8 @@
   <div slot="left">
     <img src="/blank.svg" alt="" height="24px" />
   </div>
-  <div slot="right">
+  <div slot="right" class="flex">
+    <ThemeToggle />
     <a href="/settings/keys"><img src="/gear.svg" class="path" alt="" height="24px" /></a>
   </div>
 </NavigationBar>
@@ -36,11 +38,25 @@
   {:else}
   <div class="flex">
     <button on:click={newThread}>スレ立て</button>
-    <button on:click={reload}>一覧リロード</button>
+    <button on:click={() => load()}>一覧リロード</button>
+    <select bind:value={currentSort} on:change={() => load()}>
+      <option value="latest">最新書込順</option>
+      <option value="oldest">古い書込順</option>
+      <option value="created_new">新スレ順</option>
+      <option value="created_old">古スレ順</option>
+    </select>
   </div>
+
+  <div class="thread-index">
+    <p>[スレッド一覧]</p>
+    {#each threads as thread, i}
+      <span>{i + 1}: </span><a href="#{thread.id}">{thread.name !== "" ? thread.name : "スレタイなし"}</a>&nbsp;
+    {/each}
+  </div>
+
   {#each threads as thread}
     <!-- {JSON.stringify(thread)} -->
-    <section>
+    <section id={thread.id}>
       <h2>
         <a href="/{thread.id}">
           {thread.name !== "" ? thread.name : "スレタイなし"}
@@ -66,7 +82,9 @@
 
 <style>
   section {
-    padding: 16px 0;
+    border: 1px solid #888;
+    padding: 8px;
+    margin-bottom: 12px;
   }
   article {
     padding: 2px 0;
@@ -77,5 +95,16 @@
   }
   h2 {
     margin-bottom: 12px;
+  }
+  .thread-index {
+    border: 1px solid #888;
+    padding: 8px;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .thread-index p {
+    font-weight: bold;
+    margin-bottom: 4px;
   }
 </style>

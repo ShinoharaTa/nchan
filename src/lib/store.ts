@@ -81,3 +81,37 @@ export function getSecKey(): string | null {
 }
 
 initializeStores();
+
+// テーマ管理
+export type Theme = "light" | "dark" | "system";
+
+const theme = writable<Theme>("system");
+
+function applyTheme(t: Theme) {
+  if (typeof window === "undefined") return;
+  const isDark =
+    t === "dark" ||
+    (t === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.classList.toggle("dark", isDark);
+}
+
+export function getTheme(): Theme {
+  return get(theme);
+}
+
+export function setTheme(t: Theme) {
+  theme.set(t);
+  localStorage.setItem("nchan_theme", t);
+  applyTheme(t);
+}
+
+export function initTheme() {
+  if (typeof window === "undefined") return;
+  const saved = localStorage.getItem("nchan_theme") as Theme | null;
+  const t = saved ?? "system";
+  theme.set(t);
+  applyTheme(t);
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if (get(theme) === "system") applyTheme("system");
+  });
+}

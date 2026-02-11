@@ -2,6 +2,7 @@
   import { page } from "$app/stores";
   import Modal from "$lib/components/modal.svelte";
   import NavigationBar from "$lib/components/navbar.svelte";
+  import ThemeToggle from "$lib/components/theme-toggle.svelte";
   import Post from "$lib/components/post.svelte";
   import {
     generateKey,
@@ -23,7 +24,7 @@
   import { onMount, tick } from "svelte";
   import { writable } from "svelte/store";
   import "websocket-polyfill";
-  const channel_id: string = $page.params.channel_id;
+  const channel_id = $page.params.channel_id ?? "";
 
   // 取得したイベントを時系列で並べ替える
   const sorted = (events: Nostr.Event[]) => {
@@ -41,7 +42,7 @@
 
   let postContent = "";
   let replyId: string | null = null;
-  let parentEvent: Event<Kind.ChannelMessage>;
+  let parentEvent: any;
   let openReplyModal = false;
   let anonymous = true;
   $: submitDisabled = !postContent.trim();
@@ -93,7 +94,8 @@
       <img src="/left.svg" class="path" alt="" height="24px" />
     </a>
   </div>
-  <div slot="right">
+  <div slot="right" class="flex">
+    <ThemeToggle />
     <a href="/settings/keys">
       <img src="/gear.svg" class="path" alt="" height="24px" />
     </a>
