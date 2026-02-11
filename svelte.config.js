@@ -6,6 +6,8 @@ const config = {
   preprocess: [vitePreprocess()],
   kit: {
     adapter: adapter({
+      pages: ".svelte-kit/cloudflare",
+      assets: ".svelte-kit/cloudflare",
       fallback: "index.html",
     }),
   },
