@@ -1,9 +1,8 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { parseCreated } from "$lib/app";
+  import { parseCreated, sanitizeDisplayText } from "$lib/app";
   import Author from "$lib/components/author.svelte";
   import NavigationBar from "$lib/components/navbar.svelte";
-  import ThemeToggle from "$lib/components/theme-toggle.svelte";
   import { fetchThreadList, type SortOption } from "$lib/api";
   import { onMount } from "svelte";
 
@@ -28,7 +27,6 @@
     <img src="/blank.svg" alt="" height="24px" />
   </div>
   <div slot="right" class="flex">
-    <ThemeToggle />
     <a href="/settings/keys"><img src="/gear.svg" class="path" alt="" height="24px" /></a>
   </div>
 </NavigationBar>
@@ -36,7 +34,7 @@
   {#if loading}
     <p class="center">Loading...</p>
   {:else}
-  <div class="flex">
+  <div class="flex thread-controls">
     <button on:click={newThread}>スレ立て</button>
     <button on:click={() => load()}>一覧リロード</button>
     <select bind:value={currentSort} on:change={() => load()}>
@@ -50,7 +48,9 @@
   <div class="thread-index">
     <p>[スレッド一覧]</p>
     {#each threads as thread, i}
-      <span>{i + 1}: </span><a href="#{thread.id}">{thread.name !== "" ? thread.name : "スレタイなし"}</a>&nbsp;
+      <span class="thread-index-item">
+        <span class="thread-index-number">{i + 1}:</span><a href="#{thread.id}">{thread.name !== "" ? sanitizeDisplayText(thread.name) : "スレタイなし"}</a>
+      </span>
     {/each}
   </div>
 
@@ -59,7 +59,7 @@
     <section id={thread.id}>
       <h2>
         <a href="/{thread.id}">
-          {thread.name !== "" ? thread.name : "スレタイなし"}
+          {thread.name !== "" ? sanitizeDisplayText(thread.name) : "スレタイなし"}
         </a>
       </h2>
       {#each thread.events.reverse() as event}
@@ -68,7 +68,7 @@
               <span style="background: #{event.pubkey.slice(0, 6)}66">
                 {event.pubkey.slice(0, 6)}
               </span>
-              {event.content}</p>
+              {sanitizeDisplayText(event.content)}</p>
             </article>
         {/each}
       <aside class="flex">
@@ -106,5 +106,20 @@
   .thread-index p {
     font-weight: bold;
     margin-bottom: 4px;
+  }
+  .thread-index-item {
+    margin-right: 0.4rem;
+  }
+  .thread-index-number {
+    white-space: nowrap;
+  }
+  .thread-controls {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .thread-controls button,
+  .thread-controls select {
+    font-size: 0.9rem;
+    padding: 6px 10px;
   }
 </style>

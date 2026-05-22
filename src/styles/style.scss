@@ -66,6 +66,8 @@ p {
   line-height: 1.4;
   white-space: pre-wrap;
   word-break: break-all;
+  overflow-wrap: anywhere;
+  contain: paint;
 }
 
 article {
@@ -177,6 +179,7 @@ button {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  contain: paint;
 }
 
 .path {
