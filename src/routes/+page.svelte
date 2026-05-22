@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { parseCreated } from "$lib/app";
+  import { parseCreated, sanitizeDisplayText } from "$lib/app";
   import Author from "$lib/components/author.svelte";
   import NavigationBar from "$lib/components/navbar.svelte";
   import ThemeToggle from "$lib/components/theme-toggle.svelte";
@@ -50,7 +50,7 @@
   <div class="thread-index">
     <p>[スレッド一覧]</p>
     {#each threads as thread, i}
-      <span>{i + 1}: </span><a href="#{thread.id}">{thread.name !== "" ? thread.name : "スレタイなし"}</a>&nbsp;
+      <span>{i + 1}: </span><a href="#{thread.id}">{thread.name !== "" ? sanitizeDisplayText(thread.name) : "スレタイなし"}</a>&nbsp;
     {/each}
   </div>
 
@@ -59,7 +59,7 @@
     <section id={thread.id}>
       <h2>
         <a href="/{thread.id}">
-          {thread.name !== "" ? thread.name : "スレタイなし"}
+          {thread.name !== "" ? sanitizeDisplayText(thread.name) : "スレタイなし"}
         </a>
       </h2>
       {#each thread.events.reverse() as event}
@@ -68,7 +68,7 @@
               <span style="background: #{event.pubkey.slice(0, 6)}66">
                 {event.pubkey.slice(0, 6)}
               </span>
-              {event.content}</p>
+              {sanitizeDisplayText(event.content)}</p>
             </article>
         {/each}
       <aside class="flex">
