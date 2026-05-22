@@ -3,7 +3,6 @@
   import { parseCreated, sanitizeDisplayText } from "$lib/app";
   import Author from "$lib/components/author.svelte";
   import NavigationBar from "$lib/components/navbar.svelte";
-  import ThemeToggle from "$lib/components/theme-toggle.svelte";
   import { fetchThreadList, type SortOption } from "$lib/api";
   import { onMount } from "svelte";
 
@@ -28,7 +27,6 @@
     <img src="/blank.svg" alt="" height="24px" />
   </div>
   <div slot="right" class="flex">
-    <ThemeToggle />
     <a href="/settings/keys"><img src="/gear.svg" class="path" alt="" height="24px" /></a>
   </div>
 </NavigationBar>
@@ -50,7 +48,9 @@
   <div class="thread-index">
     <p>[スレッド一覧]</p>
     {#each threads as thread, i}
-      <span>{i + 1}: </span><a href="#{thread.id}">{thread.name !== "" ? sanitizeDisplayText(thread.name) : "スレタイなし"}</a>&nbsp;
+      <span class="thread-index-item">
+        <span class="thread-index-number">{i + 1}:</span><a href="#{thread.id}">{thread.name !== "" ? sanitizeDisplayText(thread.name) : "スレタイなし"}</a>
+      </span>
     {/each}
   </div>
 
@@ -106,5 +106,11 @@
   .thread-index p {
     font-weight: bold;
     margin-bottom: 4px;
+  }
+  .thread-index-item {
+    margin-right: 0.4rem;
+  }
+  .thread-index-number {
+    white-space: nowrap;
   }
 </style>

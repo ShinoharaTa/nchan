@@ -55,11 +55,15 @@
   <div slot="left">
     <a href="/"><img src="/left.svg" class="path" alt="" height="24px" /></a>
   </div>
-  <div slot="right" class="flex">
-    <ThemeToggle />
-  </div>
 </NavigationBar>
 <div>
+  <section>
+    <h2>表示設定</h2>
+    <div class="flex">
+      <span>テーマ切替</span>
+      <ThemeToggle />
+    </div>
+  </section>
   <label>
     匿名秘密鍵(本日のみ):<br />
     <input
@@ -88,3 +92,13 @@
     <button on:click={onClickRemovePrivateKey}>秘密鍵を削除する</button>
   </div>
 </div>
+
+<style>
+  section {
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    margin-bottom: 12px;
+  }
+</style>
