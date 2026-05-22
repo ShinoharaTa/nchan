@@ -34,7 +34,7 @@
   {#if loading}
     <p class="center">Loading...</p>
   {:else}
-  <div class="flex">
+  <div class="flex thread-controls">
     <button on:click={newThread}>スレ立て</button>
     <button on:click={() => load()}>一覧リロード</button>
     <select bind:value={currentSort} on:change={() => load()}>
@@ -112,5 +112,14 @@
   }
   .thread-index-number {
     white-space: nowrap;
+  }
+  .thread-controls {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .thread-controls button,
+  .thread-controls select {
+    font-size: 0.9rem;
+    padding: 6px 10px;
   }
 </style>
